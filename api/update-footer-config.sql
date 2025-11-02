@@ -44,6 +44,6 @@ SET config_value = '{
 WHERE config_key = 'footer';
 
 -- Verify the update
-SELECT config_key, JSON_PRETTY(config_value) as formatted_config
+SELECT config_key, config_value
 FROM configs 
 WHERE config_key = 'footer';

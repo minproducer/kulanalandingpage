@@ -24,10 +24,13 @@ interface FooterConfig {
     social: {
       enabled: boolean;
       title?: string;
-      links?: {
-        email?: string;
-        linkedin?: string;
-        facebook?: string;
+      platforms?: {
+        email?: { enabled: boolean; value: string };
+        linkedin?: { enabled: boolean; username: string };
+        facebook?: { enabled: boolean; username: string };
+        twitter?: { enabled: boolean; username: string };
+        instagram?: { enabled: boolean; username: string };
+        youtube?: { enabled: boolean; username: string };
       };
     };
   };
@@ -477,7 +480,7 @@ const FooterSettings = () => {
           </div>
           
           {config.sections.social.enabled && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-4">
               <label className="block">
                 <span className="font-accent text-sm font-semibold text-text-primary">Title</span>
                 <input
@@ -488,57 +491,223 @@ const FooterSettings = () => {
                   placeholder="Follow Us"
                 />
               </label>
-              <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Email Link</span>
-                <input
-                  type="url"
-                  value={config.sections.social.links?.email || ''}
-                  onChange={(e) => {
-                    const newConfig = JSON.parse(JSON.stringify(config));
-                    if (!newConfig.sections.social.links) {
-                      newConfig.sections.social.links = {};
-                    }
-                    newConfig.sections.social.links.email = e.target.value;
-                    setConfig(newConfig);
-                  }}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
-                  placeholder="mailto:info@example.com or #"
-                />
-              </label>
-              <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">LinkedIn URL</span>
-                <input
-                  type="url"
-                  value={config.sections.social.links?.linkedin || ''}
-                  onChange={(e) => {
-                    const newConfig = JSON.parse(JSON.stringify(config));
-                    if (!newConfig.sections.social.links) {
-                      newConfig.sections.social.links = {};
-                    }
-                    newConfig.sections.social.links.linkedin = e.target.value;
-                    setConfig(newConfig);
-                  }}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
-                  placeholder="https://linkedin.com/company/yourcompany"
-                />
-              </label>
-              <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Facebook URL</span>
-                <input
-                  type="url"
-                  value={config.sections.social.links?.facebook || ''}
-                  onChange={(e) => {
-                    const newConfig = JSON.parse(JSON.stringify(config));
-                    if (!newConfig.sections.social.links) {
-                      newConfig.sections.social.links = {};
-                    }
-                    newConfig.sections.social.links.facebook = e.target.value;
-                    setConfig(newConfig);
-                  }}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
-                  placeholder="https://facebook.com/yourpage"
-                />
-              </label>
+
+              <div className="space-y-4">
+                <p className="font-accent text-sm font-semibold text-text-primary">Social Media Platforms</p>
+                
+                {/* Email */}
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                  <input
+                    type="checkbox"
+                    checked={config.sections.social.platforms?.email?.enabled || false}
+                    onChange={(e) => {
+                      const newConfig = JSON.parse(JSON.stringify(config));
+                      if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                      if (!newConfig.sections.social.platforms.email) newConfig.sections.social.platforms.email = { enabled: false, value: '' };
+                      newConfig.sections.social.platforms.email.enabled = e.target.checked;
+                      setConfig(newConfig);
+                    }}
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                  />
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-text-primary mb-1">📧 Email</label>
+                    <input
+                      type="email"
+                      value={config.sections.social.platforms?.email?.value || ''}
+                      onChange={(e) => {
+                        const newConfig = JSON.parse(JSON.stringify(config));
+                        if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                        if (!newConfig.sections.social.platforms.email) newConfig.sections.social.platforms.email = { enabled: true, value: '' };
+                        newConfig.sections.social.platforms.email.value = e.target.value;
+                        setConfig(newConfig);
+                      }}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                      placeholder="info@example.com"
+                      disabled={!config.sections.social.platforms?.email?.enabled}
+                    />
+                  </div>
+                </div>
+
+                {/* LinkedIn */}
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                  <input
+                    type="checkbox"
+                    checked={config.sections.social.platforms?.linkedin?.enabled || false}
+                    onChange={(e) => {
+                      const newConfig = JSON.parse(JSON.stringify(config));
+                      if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                      if (!newConfig.sections.social.platforms.linkedin) newConfig.sections.social.platforms.linkedin = { enabled: false, username: '' };
+                      newConfig.sections.social.platforms.linkedin.enabled = e.target.checked;
+                      setConfig(newConfig);
+                    }}
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                  />
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-text-primary mb-1">💼 LinkedIn</label>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500">linkedin.com/company/</span>
+                      <input
+                        type="text"
+                        value={config.sections.social.platforms?.linkedin?.username || ''}
+                        onChange={(e) => {
+                          const newConfig = JSON.parse(JSON.stringify(config));
+                          if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                          if (!newConfig.sections.social.platforms.linkedin) newConfig.sections.social.platforms.linkedin = { enabled: true, username: '' };
+                          newConfig.sections.social.platforms.linkedin.username = e.target.value;
+                          setConfig(newConfig);
+                        }}
+                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                        placeholder="yourcompany"
+                        disabled={!config.sections.social.platforms?.linkedin?.enabled}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Facebook */}
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                  <input
+                    type="checkbox"
+                    checked={config.sections.social.platforms?.facebook?.enabled || false}
+                    onChange={(e) => {
+                      const newConfig = JSON.parse(JSON.stringify(config));
+                      if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                      if (!newConfig.sections.social.platforms.facebook) newConfig.sections.social.platforms.facebook = { enabled: false, username: '' };
+                      newConfig.sections.social.platforms.facebook.enabled = e.target.checked;
+                      setConfig(newConfig);
+                    }}
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                  />
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-text-primary mb-1">📘 Facebook</label>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500">facebook.com/</span>
+                      <input
+                        type="text"
+                        value={config.sections.social.platforms?.facebook?.username || ''}
+                        onChange={(e) => {
+                          const newConfig = JSON.parse(JSON.stringify(config));
+                          if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                          if (!newConfig.sections.social.platforms.facebook) newConfig.sections.social.platforms.facebook = { enabled: true, username: '' };
+                          newConfig.sections.social.platforms.facebook.username = e.target.value;
+                          setConfig(newConfig);
+                        }}
+                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                        placeholder="yourpage"
+                        disabled={!config.sections.social.platforms?.facebook?.enabled}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Twitter/X */}
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                  <input
+                    type="checkbox"
+                    checked={config.sections.social.platforms?.twitter?.enabled || false}
+                    onChange={(e) => {
+                      const newConfig = JSON.parse(JSON.stringify(config));
+                      if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                      if (!newConfig.sections.social.platforms.twitter) newConfig.sections.social.platforms.twitter = { enabled: false, username: '' };
+                      newConfig.sections.social.platforms.twitter.enabled = e.target.checked;
+                      setConfig(newConfig);
+                    }}
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                  />
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-text-primary mb-1">🐦 Twitter/X</label>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500">twitter.com/</span>
+                      <input
+                        type="text"
+                        value={config.sections.social.platforms?.twitter?.username || ''}
+                        onChange={(e) => {
+                          const newConfig = JSON.parse(JSON.stringify(config));
+                          if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                          if (!newConfig.sections.social.platforms.twitter) newConfig.sections.social.platforms.twitter = { enabled: true, username: '' };
+                          newConfig.sections.social.platforms.twitter.username = e.target.value;
+                          setConfig(newConfig);
+                        }}
+                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                        placeholder="yourhandle"
+                        disabled={!config.sections.social.platforms?.twitter?.enabled}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Instagram */}
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                  <input
+                    type="checkbox"
+                    checked={config.sections.social.platforms?.instagram?.enabled || false}
+                    onChange={(e) => {
+                      const newConfig = JSON.parse(JSON.stringify(config));
+                      if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                      if (!newConfig.sections.social.platforms.instagram) newConfig.sections.social.platforms.instagram = { enabled: false, username: '' };
+                      newConfig.sections.social.platforms.instagram.enabled = e.target.checked;
+                      setConfig(newConfig);
+                    }}
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                  />
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-text-primary mb-1">📷 Instagram</label>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500">instagram.com/</span>
+                      <input
+                        type="text"
+                        value={config.sections.social.platforms?.instagram?.username || ''}
+                        onChange={(e) => {
+                          const newConfig = JSON.parse(JSON.stringify(config));
+                          if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                          if (!newConfig.sections.social.platforms.instagram) newConfig.sections.social.platforms.instagram = { enabled: true, username: '' };
+                          newConfig.sections.social.platforms.instagram.username = e.target.value;
+                          setConfig(newConfig);
+                        }}
+                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                        placeholder="youraccount"
+                        disabled={!config.sections.social.platforms?.instagram?.enabled}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* YouTube */}
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                  <input
+                    type="checkbox"
+                    checked={config.sections.social.platforms?.youtube?.enabled || false}
+                    onChange={(e) => {
+                      const newConfig = JSON.parse(JSON.stringify(config));
+                      if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                      if (!newConfig.sections.social.platforms.youtube) newConfig.sections.social.platforms.youtube = { enabled: false, username: '' };
+                      newConfig.sections.social.platforms.youtube.enabled = e.target.checked;
+                      setConfig(newConfig);
+                    }}
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                  />
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-text-primary mb-1">📺 YouTube</label>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500">youtube.com/@</span>
+                      <input
+                        type="text"
+                        value={config.sections.social.platforms?.youtube?.username || ''}
+                        onChange={(e) => {
+                          const newConfig = JSON.parse(JSON.stringify(config));
+                          if (!newConfig.sections.social.platforms) newConfig.sections.social.platforms = {};
+                          if (!newConfig.sections.social.platforms.youtube) newConfig.sections.social.platforms.youtube = { enabled: true, username: '' };
+                          newConfig.sections.social.platforms.youtube.username = e.target.value;
+                          setConfig(newConfig);
+                        }}
+                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                        placeholder="yourchannel"
+                        disabled={!config.sections.social.platforms?.youtube?.enabled}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
