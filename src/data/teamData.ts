@@ -14,7 +14,7 @@ export const teamMembers: TeamMember[] = [
 In addition to a strong track record in entrepreneurship, Lana Petrovich brings more than 15 years of expertise in global importing, navigating complex international markets and supply chains with efficiency and precision. A seasoned professional in remodeling and interior design as well, Lana Petrovich has spent 15 years transforming residential and commercial spaces with a keen eye for detail, functionality, and aesthetics.
 
 Whether building businesses, sourcing products globally, or designing beautiful interiors, Lana Petrovich blends creativity with strategy to deliver impactful results across industries.`,
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
+    image: '/Lana Petrovich.jpg',
   },
   {
     name: 'Mike Shrum',
@@ -22,7 +22,7 @@ Whether building businesses, sourcing products globally, or designing beautiful 
     bio: `Mike Shrum brings over 35 years of experience in the commercial window and glazing industry, beginning his career in engineering at EFCO Corporation in 1987. He went on to hold leadership roles at Peerless Products, Traco Windows and Doors, and most recently served as Vice President of McInerney & Associates until 2023. Mike's expertise spans plant operations, sales, and architectural consulting, and he now leads Pinnacle Glazing Company with a focus on precision and performance.
 
 Together, Mike and his partners have successfully delivered complex glazing projects across Texas and the Southeast, including over 20 K-12 school renovations, major university buildings, historical restorations, and high-rise new construction up to 40 stories.`,
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80',
+    image: '/Mike Shrum.jpg',
   },
   {
     name: 'Dr. Danielle Nguyen',
@@ -30,12 +30,12 @@ Together, Mike and his partners have successfully delivered complex glazing proj
     bio: `Dr. Danielle Nguyen is a seasoned professional with over 25 years of experience in operations management, compliance, and quality assurance across industries such as healthcare, pharmaceuticals, retail, and international business. She has held senior leadership roles at prominent organizations, including Walmart Inc., Tenet Corporation, and HCA, where she advanced operational excellence and regulatory compliance. Known for her strategic vision, Dr. Nguyen has successfully led transformative initiatives, from implementing government healthcare mandates to enhancing IT system standardization and population health management. As a project leader, she has driven performance improvements for large, multi-facility organizations, ensuring alignment with strategic goals and adherence to compliance standards.
 
 Dr. Nguyen's expertise extends to corporate affairs and business growth, where she has advised private companies since 2008. Her track record includes spearheading flagship projects that elevate competitive positioning and enhance service quality. Adept at performance measurement and process optimization, she has consistently delivered innovative solutions to complex operational challenges. A trusted advisor and thought leader, Dr. Nguyen excels in fostering organizational growth, resource management, and workforce development. Her remarkable leadership continues to be a catalyst for progress and excellence in every endeavor.`,
-    image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80',
+    image: '/Danielle Nguyen.jpg',
   },
   {
     name: 'Christian Petrovich',
     title: 'Managing Partner',
     bio: `Christian Petrovich brings over 20 years of entrepreneurial experience across a diverse range of industries. His career spans the medical field as a licensed physical therapist, high-fashion modeling, luxury fragrance design, and international shipping and logistics. With a unique blend of creativity, business acumen, and global insight, Christian continues to build innovative ventures that reflect his passion for excellence and purposeful living.`,
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80',
+    image: '/Christian Petrovich.jpg',
   },
 ];
