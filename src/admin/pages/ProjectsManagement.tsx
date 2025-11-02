@@ -53,6 +53,13 @@ const ProjectsManagement = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Show preview immediately
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData(prev => ({ ...prev, image: reader.result as string }));
+    };
+    reader.readAsDataURL(file);
+
     try {
       setUploadingImage(true);
       const formDataUpload = new FormData();
@@ -66,13 +73,18 @@ const ProjectsManagement = () => {
       const result = await response.json();
 
       if (result.success) {
+        // Replace preview with actual server URL
         setFormData(prev => ({ ...prev, image: result.url }));
       } else {
         alert('Upload failed: ' + result.message);
+        // Revert to empty if upload fails
+        setFormData(prev => ({ ...prev, image: '' }));
       }
     } catch (error) {
       console.error('Upload error:', error);
       alert('Failed to upload image');
+      // Revert to empty if upload fails
+      setFormData(prev => ({ ...prev, image: '' }));
     } finally {
       setUploadingImage(false);
     }
