@@ -91,6 +91,24 @@ const ProjectsManagement = () => {
   };
 
   const handleSaveProject = async () => {
+    // Validation
+    if (!formData.name || !formData.location || !formData.image || !formData.description) {
+      alert('Please fill in all required fields (Name, Location, Image, Description)');
+      return;
+    }
+
+    // Check if image is still uploading
+    if (uploadingImage) {
+      alert('Please wait for image upload to complete');
+      return;
+    }
+
+    // Check if image is base64 (local preview) instead of server URL
+    if (formData.image.startsWith('data:')) {
+      alert('Please wait for image upload to complete. If upload failed, try selecting the image again.');
+      return;
+    }
+
     try {
       let updatedProjects: Project[];
 
@@ -319,10 +337,16 @@ const ProjectsManagement = () => {
           <div className="flex gap-4 mt-6">
             <button
               onClick={handleSaveProject}
-              disabled={!formData.name || !formData.location || !formData.image || !formData.description}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed"
+              disabled={!formData.name || !formData.location || !formData.image || !formData.description || uploadingImage}
+              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
             >
-              Save Project
+              {uploadingImage && (
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              )}
+              {uploadingImage ? 'Uploading Image...' : 'Save Project'}
             </button>
             <button
               onClick={handleCancelEdit}
@@ -331,6 +355,9 @@ const ProjectsManagement = () => {
               Cancel
             </button>
           </div>
+          {!formData.name || !formData.location || !formData.image || !formData.description ? (
+            <p className="text-sm text-red-600 mt-2">* Please fill in all required fields</p>
+          ) : null}
         </div>
       )}
 
