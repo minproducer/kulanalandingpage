@@ -219,6 +219,9 @@ const FooterSettings = () => {
       newConfig.sections.companyInfo.logoUrl = '';
       setConfig(newConfig);
 
+      // Add 1 second delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
       // Auto-save to database
       const saveResponse = await apiService.updateConfig('footer', newConfig);
       
@@ -227,10 +230,12 @@ const FooterSettings = () => {
         setTimeout(() => setMessage(null), 3000);
       } else {
         setMessage({ type: 'error', text: 'Failed to remove logo' });
+        setTimeout(() => setMessage(null), 3000);
       }
     } catch (error) {
       console.error('Error removing logo:', error);
       setMessage({ type: 'error', text: 'Error removing logo' });
+      setTimeout(() => setMessage(null), 3000);
     } finally {
       setSaving(false);
     }
@@ -243,6 +248,9 @@ const FooterSettings = () => {
       setSaving(true);
       setMessage(null);
       
+      // Add 1.5 second delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       const response = await apiService.updateConfig('footer', config);
       
       if (response.success) {
@@ -250,10 +258,12 @@ const FooterSettings = () => {
         setTimeout(() => setMessage(null), 3000);
       } else {
         setMessage({ type: 'error', text: response.message || 'Failed to save settings' });
+        setTimeout(() => setMessage(null), 3000);
       }
     } catch (error) {
       console.error('Error saving config:', error);
       setMessage({ type: 'error', text: 'Error saving configuration' });
+      setTimeout(() => setMessage(null), 3000);
     } finally {
       setSaving(false);
     }
@@ -279,7 +289,52 @@ const FooterSettings = () => {
   }
 
   return (
-    <div>
+    <div className="relative">
+      {/* Notification Popup */}
+      {message && (
+        <div className={`fixed top-4 right-4 z-50 max-w-md w-full transform transition-all duration-300 ease-in-out ${
+          message ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+        }`}>
+          <div className={`rounded-lg shadow-lg p-4 flex items-start gap-3 ${
+            message.type === 'success' 
+              ? 'bg-green-50 border-l-4 border-green-500' 
+              : 'bg-red-50 border-l-4 border-red-500'
+          }`}>
+            {message.type === 'success' ? (
+              <svg className="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            )}
+            <div className="flex-1">
+              <p className={`font-semibold ${
+                message.type === 'success' ? 'text-green-800' : 'text-red-800'
+              }`}>
+                {message.type === 'success' ? 'Success!' : 'Error!'}
+              </p>
+              <p className={`text-sm mt-1 ${
+                message.type === 'success' ? 'text-green-700' : 'text-red-700'
+              }`}>
+                {message.text}
+              </p>
+            </div>
+            <button
+              onClick={() => setMessage(null)}
+              className={`flex-shrink-0 ${
+                message.type === 'success' ? 'text-green-500 hover:text-green-700' : 'text-red-500 hover:text-red-700'
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="mb-8">
         <h1 className="font-serif text-4xl font-bold text-text-primary mb-2">
           Footer Settings
@@ -288,17 +343,6 @@ const FooterSettings = () => {
           Manage footer sections visibility and content
         </p>
       </div>
-
-      {/* Message Alert */}
-      {message && (
-        <div className={`mb-6 p-4 rounded-lg ${
-          message.type === 'success' 
-            ? 'bg-green-50 border border-green-200 text-green-700' 
-            : 'bg-red-50 border border-red-200 text-red-700'
-        }`}>
-          {message.text}
-        </div>
-      )}
 
       {/* Footer Sections */}
       <div className="space-y-6">
