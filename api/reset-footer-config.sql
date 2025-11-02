@@ -32,10 +32,13 @@ VALUES (
       "social": {
         "enabled": false,
         "title": "Follow Us",
-        "links": {
-          "email": "#",
-          "linkedin": "#",
-          "facebook": "#"
+        "platforms": {
+          "email": {"enabled": false, "value": "info@kulanadevelopment.com"},
+          "linkedin": {"enabled": false, "username": "kulana-development"},
+          "facebook": {"enabled": false, "username": "kulanadev"},
+          "twitter": {"enabled": false, "username": "kulanadev"},
+          "instagram": {"enabled": false, "username": "kulanadev"},
+          "youtube": {"enabled": false, "username": "kulanadev"}
         }
       }
     },

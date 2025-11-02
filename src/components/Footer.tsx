@@ -25,10 +25,13 @@ interface FooterConfig {
     social: {
       enabled: boolean;
       title?: string;
-      links?: {
-        email?: string;
-        linkedin?: string;
-        facebook?: string;
+      platforms?: {
+        email?: { enabled: boolean; value: string };
+        linkedin?: { enabled: boolean; username: string };
+        facebook?: { enabled: boolean; username: string };
+        twitter?: { enabled: boolean; username: string };
+        instagram?: { enabled: boolean; username: string };
+        youtube?: { enabled: boolean; username: string };
       };
     };
   };
@@ -150,21 +153,78 @@ const Footer = () => {
 
           {/* Column 4: Social Links */}
           <div>
-            {sections.social.enabled && sections.social.links && (
+            {sections.social.enabled && sections.social.platforms && (
               <>
-                <h3 className="font-accent text-base font-semibold mb-4 text-white">
-                  {sections.social.title}
-                </h3>
-                <div className="flex space-x-4">
-                  <a href={sections.social.links.email} className="w-10 h-10 bg-gold/20 hover:bg-gold rounded flex items-center justify-center transition-all duration-300">
-                    <span className="text-lg">📧</span>
-                  </a>
-                  <a href={sections.social.links.linkedin} className="w-10 h-10 bg-gold/20 hover:bg-gold rounded flex items-center justify-center transition-all duration-300">
-                    <span className="text-lg">�</span>
-                  </a>
-                  <a href={sections.social.links.facebook} className="w-10 h-10 bg-gold/20 hover:bg-gold rounded flex items-center justify-center transition-all duration-300">
-                    <span className="text-lg">�</span>
-                  </a>
+                {sections.social.title && (
+                  <h3 className="font-accent text-base font-semibold mb-4 text-white">
+                    {sections.social.title}
+                  </h3>
+                )}
+                <div className="flex flex-wrap gap-3">
+                  {sections.social.platforms.email?.enabled && sections.social.platforms.email.value && (
+                    <a 
+                      href={`mailto:${sections.social.platforms.email.value}`} 
+                      className="w-10 h-10 bg-gold/20 hover:bg-gold rounded flex items-center justify-center transition-all duration-300"
+                      title="Email"
+                    >
+                      <span className="text-lg">📧</span>
+                    </a>
+                  )}
+                  {sections.social.platforms.linkedin?.enabled && sections.social.platforms.linkedin.username && (
+                    <a 
+                      href={`https://linkedin.com/company/${sections.social.platforms.linkedin.username}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-gold/20 hover:bg-gold rounded flex items-center justify-center transition-all duration-300"
+                      title="LinkedIn"
+                    >
+                      <span className="text-lg">�</span>
+                    </a>
+                  )}
+                  {sections.social.platforms.facebook?.enabled && sections.social.platforms.facebook.username && (
+                    <a 
+                      href={`https://facebook.com/${sections.social.platforms.facebook.username}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-gold/20 hover:bg-gold rounded flex items-center justify-center transition-all duration-300"
+                      title="Facebook"
+                    >
+                      <span className="text-lg">📘</span>
+                    </a>
+                  )}
+                  {sections.social.platforms.twitter?.enabled && sections.social.platforms.twitter.username && (
+                    <a 
+                      href={`https://twitter.com/${sections.social.platforms.twitter.username}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-gold/20 hover:bg-gold rounded flex items-center justify-center transition-all duration-300"
+                      title="Twitter/X"
+                    >
+                      <span className="text-lg">🐦</span>
+                    </a>
+                  )}
+                  {sections.social.platforms.instagram?.enabled && sections.social.platforms.instagram.username && (
+                    <a 
+                      href={`https://instagram.com/${sections.social.platforms.instagram.username}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-gold/20 hover:bg-gold rounded flex items-center justify-center transition-all duration-300"
+                      title="Instagram"
+                    >
+                      <span className="text-lg">📷</span>
+                    </a>
+                  )}
+                  {sections.social.platforms.youtube?.enabled && sections.social.platforms.youtube.username && (
+                    <a 
+                      href={`https://youtube.com/@${sections.social.platforms.youtube.username}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-gold/20 hover:bg-gold rounded flex items-center justify-center transition-all duration-300"
+                      title="YouTube"
+                    >
+                      <span className="text-lg">📺</span>
+                    </a>
+                  )}
                 </div>
               </>
             )}
