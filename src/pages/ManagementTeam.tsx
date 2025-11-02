@@ -3,11 +3,22 @@ import { teamMembers } from '../data/teamData';
 const ManagementTeam = () => {
   return (
     <div className="pt-20">
-      {/* Hero Section */}
-      <section className="bg-navy text-white py-12 md:py-16">
-        <div className="max-w-4xl mx-auto px-8 text-center">
-          <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl font-bold">
-            Management Team
+      {/* Hero Section with Background Image */}
+      <section className="relative h-64 md:h-80 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1920&q=80"
+            alt="Management Team"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-navy/70"></div>
+        </div>
+        
+        {/* Title */}
+        <div className="relative h-full flex items-center justify-center z-10">
+          <h1 className="font-serif text-5xl md:text-6xl font-bold text-white">
+            Management <span className="text-gold">Team</span>
           </h1>
         </div>
       </section>

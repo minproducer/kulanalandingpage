@@ -17,15 +17,28 @@ const FAQ = () => {
 
   return (
     <div className="pt-20">
-      {/* Hero Section */}
-      <section className="bg-navy text-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-8 text-center">
-          <h1 className="font-serif text-5xl md:text-6xl font-bold mb-4">
-            Frequently Asked Questions
-          </h1>
-          <p className="font-sans text-xl text-gray-300 max-w-3xl mx-auto">
-            Everything you need to know about partnering with Kulana Development
-          </p>
+      {/* Hero Section with Background Image */}
+      <section className="relative h-64 md:h-80 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1920&q=80"
+            alt="FAQ"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-navy/70"></div>
+        </div>
+        
+        {/* Title */}
+        <div className="relative h-full flex items-center justify-center z-10 px-8">
+          <div className="text-center">
+            <h1 className="font-serif text-5xl md:text-6xl font-bold text-white mb-4">
+              <span className="text-gold">FAQ</span>
+            </h1>
+            <p className="font-sans text-lg md:text-xl text-gray-200 max-w-2xl">
+              Everything you need to know about partnering with Kulana Development
+            </p>
+          </div>
         </div>
       </section>
 
