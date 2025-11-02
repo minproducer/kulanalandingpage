@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Footer = () => {
   return (
     <footer className="bg-navy text-white">
@@ -5,37 +7,38 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Company Info */}
           <div>
-            <h3 className="font-serif text-xl font-bold mb-4 text-gold">
-              Kulana Development
-            </h3>
+            <img 
+              src="/KulanaDev Logo - center.png" 
+              alt="Kulana Development" 
+              className="h-16 w-auto mb-4"
+            />
             <p className="font-sans text-small text-gray-300 leading-relaxed">
               Transforming concepts into high-performing assets with precision, integrity, and commitment to long-term value.
             </p>
           </div>
 
-          {/* Services */}
+          {/* Navigation */}
           <div>
-            <h3 className="font-accent text-base font-semibold mb-4 text-white">Services</h3>
             <ul className="space-y-2 font-sans text-small">
               <li>
-                <a href="#" className="text-gray-300 hover:text-gold transition-colors">
-                  Feasibility Studies
-                </a>
+                <Link to="/" className="text-gray-300 hover:text-gold transition-colors">
+                  Home
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-gold transition-colors">
-                  Design Coordination
-                </a>
+                <Link to="/projects" className="text-gray-300 hover:text-gold transition-colors">
+                  Projects
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-gold transition-colors">
-                  Procurement
-                </a>
+                <Link to="/management-team" className="text-gray-300 hover:text-gold transition-colors">
+                  Management Team
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-gold transition-colors">
-                  Site Execution
-                </a>
+                <Link to="/faq" className="text-gray-300 hover:text-gold transition-colors">
+                  FAQ
+                </Link>
               </li>
             </ul>
           </div>
