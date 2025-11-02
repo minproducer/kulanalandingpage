@@ -8,6 +8,11 @@ import ManagementTeam from './pages/ManagementTeam';
 import Projects from './pages/Projects';
 import FAQ from './pages/FAQ';
 
+// Admin imports
+import AdminLayout from './admin/layouts/AdminLayout';
+import Login from './admin/pages/Login';
+import Dashboard from './admin/pages/Dashboard';
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -23,7 +28,71 @@ function ScrollToTop() {
 
 function AppContent() {
   const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
+  // Admin routes - no navbar/footer
+  if (isAdminRoute) {
+    return (
+      <Routes location={location}>
+        <Route path="/admin/login" element={<Login />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <AdminLayout>
+              <Dashboard />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/footer"
+          element={
+            <AdminLayout>
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h1 className="font-serif text-3xl font-bold text-text-primary mb-4">
+                  Footer Settings
+                </h1>
+                <p className="font-sans text-text-secondary">
+                  Footer configuration page coming soon...
+                </p>
+              </div>
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/faq"
+          element={
+            <AdminLayout>
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h1 className="font-serif text-3xl font-bold text-text-primary mb-4">
+                  FAQ Settings
+                </h1>
+                <p className="font-sans text-text-secondary">
+                  FAQ configuration page coming soon...
+                </p>
+              </div>
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/projects"
+          element={
+            <AdminLayout>
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h1 className="font-serif text-3xl font-bold text-text-primary mb-4">
+                  Projects Management
+                </h1>
+                <p className="font-sans text-text-secondary">
+                  Projects management page coming soon...
+                </p>
+              </div>
+            </AdminLayout>
+          }
+        />
+      </Routes>
+    );
+  }
+
+  // Public routes - with navbar/footer
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />

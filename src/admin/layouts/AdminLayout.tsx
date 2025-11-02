@@ -1,0 +1,126 @@
+import { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+
+interface AdminLayoutProps {
+  children: React.ReactNode;
+}
+
+const AdminLayout = ({ children }: AdminLayoutProps) => {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminAuth');
+    navigate('/admin/login');
+  };
+
+  const menuItems = [
+    { name: 'Dashboard', path: '/admin/dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+    { name: 'Footer Settings', path: '/admin/footer', icon: 'M4 6h16M4 12h16m-7 6h7' },
+    { name: 'FAQ Settings', path: '/admin/faq', icon: 'M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { name: 'Projects', path: '/admin/projects', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
+  ];
+
+  const isActive = (path: string) => location.pathname === path;
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className={`fixed inset-y-0 left-0 bg-navy text-white transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-20'} z-50`}>
+        <div className="flex flex-col h-full">
+          {/* Logo */}
+          <div className="p-4 border-b border-navy-light">
+            <div className="flex items-center justify-between">
+              {sidebarOpen ? (
+                <img src="/kulana-logo.png" alt="Kulana" className="h-10" />
+              ) : (
+                <img src="/KulanaDev Logo - center.png" alt="K" className="h-10 mx-auto" />
+              )}
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={sidebarOpen ? 'M11 19l-7-7 7-7m8 14l-7-7 7-7' : 'M13 5l7 7-7 7M5 5l7 7-7 7'} />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Menu Items */}
+          <nav className="flex-1 p-4 overflow-y-auto">
+            <ul className="space-y-2">
+              {menuItems.map((item) => (
+                <li key={item.path}>
+                  <Link
+                    to={item.path}
+                    className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
+                      isActive(item.path)
+                        ? 'bg-gold text-white'
+                        : 'text-gray-300 hover:bg-navy-light hover:text-white'
+                    }`}
+                  >
+                    <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+                    </svg>
+                    {sidebarOpen && (
+                      <span className="ml-3 font-accent font-medium">{item.name}</span>
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* User Info & Logout */}
+          <div className="p-4 border-t border-navy-light">
+            <button
+              onClick={handleLogout}
+              className="flex items-center w-full px-4 py-3 text-gray-300 hover:bg-red-600 hover:text-white rounded-lg transition-all duration-200"
+            >
+              <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              {sidebarOpen && <span className="ml-3 font-accent font-medium">Logout</span>}
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className={`transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
+        {/* Top Bar */}
+        <header className="bg-white shadow-sm">
+          <div className="px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center">
+              <h2 className="font-serif text-2xl font-bold text-text-primary">
+                Admin Panel
+              </h2>
+            </div>
+            <div className="flex items-center space-x-4">
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center px-4 py-2 text-sm font-accent font-medium text-gold hover:text-gold-light transition-colors"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                View Website
+              </a>
+            </div>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <main className="p-6">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default AdminLayout;
