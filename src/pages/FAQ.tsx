@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { faqs } from '../data/faqData';
+import { faqPageConfig } from '../config/faqPageConfig';
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -9,7 +10,9 @@ const FAQ = () => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const categories = ['All', ...Array.from(new Set(faqs.map(faq => faq.category)))];
+  const categories = faqPageConfig.categoryFilter.showAllOption 
+    ? ['All', ...Array.from(new Set(faqs.map(faq => faq.category)))]
+    : Array.from(new Set(faqs.map(faq => faq.category)));
   
   const filteredFAQs = selectedCategory === 'All' 
     ? faqs 
@@ -18,35 +21,38 @@ const FAQ = () => {
   return (
     <div className="pt-20">
       {/* Hero Section with Background Image */}
-      <section className="relative h-64 md:h-80 overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1920&q=80"
-            alt="FAQ"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-navy/70"></div>
-        </div>
-        
-        {/* Title */}
-        <div className="relative h-full flex items-center justify-center z-10 px-8">
-          <div className="text-center">
-            <h1 className="font-serif text-5xl md:text-6xl font-bold text-white mb-4">
-              <span className="text-gold">FAQ</span>
-            </h1>
-            <p className="font-sans text-lg md:text-xl text-gray-200 max-w-2xl">
-              Everything you need to know about partnering with Kulana Development
-            </p>
+      {faqPageConfig.hero.enabled && (
+        <section className="relative h-64 md:h-80 overflow-hidden">
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <img
+              src={faqPageConfig.hero.backgroundImage}
+              alt="FAQ"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-navy/70"></div>
           </div>
-        </div>
-      </section>
+          
+          {/* Title */}
+          <div className="relative h-full flex items-center justify-center z-10 px-8">
+            <div className="text-center">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-white mb-4">
+                <span className="text-gold">{faqPageConfig.hero.titleHighlight}</span>
+              </h1>
+              <p className="font-sans text-lg md:text-xl text-gray-200 max-w-2xl">
+                {faqPageConfig.hero.subtitle}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Category Filter */}
-      <section className="bg-ivory border-b border-gray-200">
-        <div className="max-w-5xl mx-auto px-8 py-6">
-          <div className="flex flex-wrap justify-center gap-3">
-            {categories.map((category) => (
+      {faqPageConfig.categoryFilter.enabled && (
+        <section className="bg-ivory border-b border-gray-200">
+          <div className="max-w-5xl mx-auto px-8 py-6">
+            <div className="flex flex-wrap justify-center gap-3">
+              {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
@@ -61,13 +67,15 @@ const FAQ = () => {
             ))}
           </div>
         </div>
-      </section>
+        </section>
+      )}
 
       {/* FAQ Section */}
-      <section className="py-20 bg-ivory">
-        <div className="max-w-5xl mx-auto px-8">
-          <div className="space-y-4">
-            {filteredFAQs.map((faq, index) => (
+      {faqPageConfig.faqs.enabled && (
+        <section className="py-20 bg-ivory">
+          <div className="max-w-5xl mx-auto px-8">
+            <div className="space-y-4">
+              {filteredFAQs.map((faq, index) => (
               <div
                 key={index}
                 className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
@@ -77,11 +85,13 @@ const FAQ = () => {
                   className="w-full px-8 py-6 text-left flex justify-between items-start hover:bg-gray-50 transition-colors duration-200"
                 >
                   <div className="flex-1 pr-8">
-                    <div className="inline-block mb-2">
-                      <span className="text-xs font-accent font-semibold text-gold uppercase tracking-wider">
-                        {faq.category}
-                      </span>
-                    </div>
+                    {faqPageConfig.faqs.showCategoryBadges && (
+                      <div className="inline-block mb-2">
+                        <span className="text-xs font-accent font-semibold text-gold uppercase tracking-wider">
+                          {faq.category}
+                        </span>
+                      </div>
+                    )}
                     <h3 className="font-serif text-xl font-bold text-text-primary">
                       {faq.question}
                     </h3>
@@ -117,7 +127,8 @@ const FAQ = () => {
             ))}
           </div>
         </div>
-      </section>
+        </section>
+      )}
 
       {/* Contact Section */}
       <section className="py-20 bg-white">
