@@ -35,7 +35,7 @@ const Navbar = () => {
             <img 
               src="/kulana-logo.png" 
               alt="Kulana Development" 
-              className="h-12 md:h-14 w-auto"
+              className="h-14 md:h-16 lg:h-18 w-auto"
             />
           </Link>
 
