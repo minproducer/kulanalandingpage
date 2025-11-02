@@ -7,6 +7,7 @@ interface FooterConfig {
     companyInfo: {
       enabled: boolean;
       description?: string;
+      logoUrl?: string;
     };
     navigation: {
       enabled: boolean;
@@ -31,6 +32,7 @@ const FooterSettings = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [config, setConfig] = useState<FooterConfig | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -93,6 +95,84 @@ const FooterSettings = () => {
       
       return newConfig;
     });
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setMessage({ type: 'error', text: 'Please upload an image file' });
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setMessage({ type: 'error', text: 'Image size must be less than 5MB' });
+      return;
+    }
+
+    try {
+      setUploading(true);
+      setMessage(null);
+
+      const response = await apiService.uploadImage(file);
+
+      if (response.success) {
+        // Update config with new logo URL
+        const newConfig = JSON.parse(JSON.stringify(config));
+        newConfig.sections.companyInfo.logoUrl = response.data.url;
+        setConfig(newConfig);
+
+        // Auto-save to database
+        const saveResponse = await apiService.updateConfig('footer', newConfig);
+        
+        if (saveResponse.success) {
+          setMessage({ type: 'success', text: 'Logo uploaded and saved successfully!' });
+          setTimeout(() => setMessage(null), 3000);
+        } else {
+          setMessage({ type: 'error', text: 'Logo uploaded but failed to save' });
+        }
+      } else {
+        setMessage({ type: 'error', text: response.message || 'Failed to upload image' });
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Error uploading image';
+      setMessage({ type: 'error', text: errorMessage });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveLogo = async () => {
+    if (!config) return;
+
+    try {
+      setSaving(true);
+      setMessage(null);
+
+      // Update config to remove logo
+      const newConfig = JSON.parse(JSON.stringify(config));
+      newConfig.sections.companyInfo.logoUrl = '';
+      setConfig(newConfig);
+
+      // Auto-save to database
+      const saveResponse = await apiService.updateConfig('footer', newConfig);
+      
+      if (saveResponse.success) {
+        setMessage({ type: 'success', text: 'Logo removed successfully!' });
+        setTimeout(() => setMessage(null), 3000);
+      } else {
+        setMessage({ type: 'error', text: 'Failed to remove logo' });
+      }
+    } catch (error) {
+      console.error('Error removing logo:', error);
+      setMessage({ type: 'error', text: 'Error removing logo' });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleSave = async () => {
@@ -187,8 +267,59 @@ const FooterSettings = () => {
           </div>
           
           {config.sections.companyInfo.enabled && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <label className="block mb-2">
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-4">
+              {/* Logo Upload */}
+              <div>
+                <label className="block mb-2">
+                  <span className="font-accent text-sm font-semibold text-text-primary">Company Logo</span>
+                  <div className="mt-2">
+                    {config.sections.companyInfo.logoUrl && (
+                      <div className="mb-3 p-3 bg-white rounded-lg border border-gray-200">
+                        <img 
+                          src={config.sections.companyInfo.logoUrl} 
+                          alt="Company Logo" 
+                          className="h-16 object-contain"
+                        />
+                      </div>
+                    )}
+                    <div className="flex items-center space-x-3">
+                      <label className="flex-1">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                          id="logo-upload"
+                        />
+                        <label 
+                          htmlFor="logo-upload"
+                          className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-accent font-medium text-text-primary bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold transition"
+                        >
+                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          {uploading ? 'Uploading...' : 'Upload Logo'}
+                        </label>
+                      </label>
+                      {config.sections.companyInfo.logoUrl && (
+                        <button
+                          onClick={handleRemoveLogo}
+                          disabled={saving}
+                          className="px-4 py-2 text-sm font-accent font-medium text-red-600 hover:text-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {saving ? 'Removing...' : 'Remove'}
+                        </button>
+                      )}
+                    </div>
+                    <p className="mt-2 text-xs text-text-secondary">
+                      PNG, JPG, GIF, WebP or SVG. Max 5MB.
+                    </p>
+                  </div>
+                </label>
+              </div>
+
+              {/* Description */}
+              <label className="block">
                 <span className="font-accent text-sm font-semibold text-text-primary">Description</span>
                 <textarea
                   value={config.sections.companyInfo.description || ''}

@@ -64,6 +64,37 @@ export const apiService = {
       throw error;
     }
   },
+
+  // Upload image
+  async uploadImage(file: File) {
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/upload-image.php`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      // Check if response is OK
+      if (!response.ok) {
+        const text = await response.text();
+        console.error('Upload response error:', text);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Try to parse JSON
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Upload image error:', error);
+      throw error;
+    }
+  },
 };
 
 // Helper to check if user is authenticated

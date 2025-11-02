@@ -3,7 +3,7 @@ export const footerConfig = {
   sections: {
     companyInfo: {
       enabled: true,
-      logo: '/KulanaDev Logo - center.png',
+      logoUrl: '/KulanaDev Logo - center.png',
       description: 'Transforming concepts into high-performing assets with precision, integrity, and commitment to long-term value.',
     },
     navigation: {

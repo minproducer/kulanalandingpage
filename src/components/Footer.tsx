@@ -1,8 +1,79 @@
 import { Link } from 'react-router-dom';
-import { footerConfig } from '../config/footerConfig';
+import { useEffect, useState } from 'react';
+import { footerConfig as defaultFooterConfig } from '../config/footerConfig';
+import { apiService } from '../services/apiService';
+
+interface FooterConfig {
+  sections: {
+    companyInfo: {
+      enabled: boolean;
+      logoUrl?: string;
+      description?: string;
+    };
+    navigation: {
+      enabled: boolean;
+      links?: Array<{ name: string; path: string }>;
+    };
+    contact: {
+      enabled: boolean;
+      title?: string;
+      email?: string;
+      phone?: string;
+      location?: string;
+    };
+    social: {
+      enabled: boolean;
+      title?: string;
+      links?: {
+        email?: string;
+        linkedin?: string;
+        facebook?: string;
+      };
+    };
+  };
+  copyright: {
+    enabled: boolean;
+    text?: string;
+    year?: number;
+  };
+}
 
 const Footer = () => {
-  const { sections, copyright } = footerConfig;
+  const [config, setConfig] = useState<FooterConfig>(defaultFooterConfig);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchConfig();
+  }, []);
+
+  const fetchConfig = async () => {
+    try {
+      const response = await apiService.getConfig('footer');
+      
+      if (response.success && response.data.value) {
+        // Merge API config with default config to ensure all fields exist
+        setConfig({
+          ...defaultFooterConfig,
+          ...response.data.value,
+          sections: {
+            ...defaultFooterConfig.sections,
+            ...response.data.value.sections,
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching footer config:', error);
+      // Use default config on error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <footer className="bg-navy text-white py-10"></footer>;
+  }
+
+  const { sections, copyright } = config;
 
   return (
     <footer className="bg-navy text-white">
@@ -13,14 +84,18 @@ const Footer = () => {
           <div className="flex flex-col items-center text-left pr-8">
             {sections.companyInfo.enabled ? (
               <>
-                <img 
-                  src={sections.companyInfo.logo}
-                  alt="Kulana Development" 
-                  className="h-40 w-auto mb-4"
-                />
-                <p className="font-sans text-small text-gray-300 leading-relaxed">
-                  {sections.companyInfo.description}
-                </p>
+                {sections.companyInfo.logoUrl && (
+                  <img 
+                    src={sections.companyInfo.logoUrl}
+                    alt="Kulana Development" 
+                    className="h-40 w-auto mb-4 object-contain"
+                  />
+                )}
+                {sections.companyInfo.description && (
+                  <p className="font-sans text-small text-gray-300 leading-relaxed">
+                    {sections.companyInfo.description}
+                  </p>
+                )}
               </>
             ) : (
               <div className="h-40"></div> // Placeholder to maintain layout
@@ -29,7 +104,7 @@ const Footer = () => {
 
           {/* Column 2: Navigation */}
           <div>
-            {sections.navigation.enabled && (
+            {sections.navigation.enabled && sections.navigation.links && (
               <>
                 <ul className="space-y-3 font-sans text-lg">
                   {sections.navigation.links.map((link) => (
@@ -69,7 +144,7 @@ const Footer = () => {
 
           {/* Column 4: Social Links */}
           <div>
-            {sections.social.enabled && (
+            {sections.social.enabled && sections.social.links && (
               <>
                 <h3 className="font-accent text-base font-semibold mb-4 text-white">
                   {sections.social.title}
