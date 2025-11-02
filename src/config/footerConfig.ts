@@ -8,15 +8,24 @@ export const footerConfig = {
     },
     navigation: {
       enabled: true,
+      title: 'Quick Links', // Optional title
+      links: [
+        { name: 'Home', path: '/' },
+        { name: 'Projects', path: '/projects' },
+        { name: 'Management Team', path: '/management-team' },
+        { name: 'FAQ', path: '/faq' },
+      ],
     },
     contact: {
       enabled: false, // Hidden for now - can be enabled via admin panel
+      title: 'Contact',
       email: 'info@kulanadevelopment.com',
       phone: '(555) 123-4567',
       location: 'Texas & Southeast',
     },
     social: {
       enabled: false, // Hidden for now - can be enabled via admin panel
+      title: 'Follow Us',
       links: {
         email: '#',
         linkedin: '#',
@@ -25,6 +34,7 @@ export const footerConfig = {
     },
   },
   copyright: {
+    enabled: true,
     text: 'Kulana Development',
     year: new Date().getFullYear(),
   },
