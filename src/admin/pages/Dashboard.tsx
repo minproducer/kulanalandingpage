@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isAuthenticated, getUserInfo } from '../../services/apiService';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const userInfo = getUserInfo();
 
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('adminAuth') === 'true';
-    if (!isAuthenticated) {
+    if (!isAuthenticated()) {
       navigate('/admin/login');
     }
   }, [navigate]);
@@ -25,7 +26,7 @@ const Dashboard = () => {
           Dashboard
         </h1>
         <p className="font-sans text-text-secondary">
-          Welcome to Kulana Development Admin Panel
+          Welcome back, {userInfo?.username || 'Admin'}! 👋
         </p>
       </div>
 

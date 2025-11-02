@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { clearAuthToken } from '../../services/apiService';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -11,7 +12,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   const location = useLocation();
 
   const handleLogout = () => {
-    localStorage.removeItem('adminAuth');
+    clearAuthToken();
     navigate('/admin/login');
   };
 

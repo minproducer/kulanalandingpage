@@ -1,21 +1,40 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiService, setAuthToken, setUserInfo } from '../../services/apiService';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
     
-    // Simple authentication - Replace with real authentication later
-    if (username === 'admin' && password === 'kulana2025') {
-      localStorage.setItem('adminAuth', 'true');
-      navigate('/admin/dashboard');
-    } else {
-      setError('Invalid username or password');
+    try {
+      const response = await apiService.login(username, password);
+      
+      if (response.success) {
+        // Save token and user info
+        setAuthToken(response.data.token);
+        setUserInfo({
+          user_id: response.data.user_id,
+          username: response.data.username,
+        });
+        
+        // Redirect to dashboard
+        navigate('/admin/dashboard');
+      } else {
+        setError(response.message || 'Invalid username or password');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Unable to connect to server. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,9 +94,10 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-gold hover:bg-gold-light text-white font-accent font-semibold py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg"
+            disabled={loading}
+            className="w-full bg-gold hover:bg-gold-light text-white font-accent font-semibold py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign In
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
