@@ -12,6 +12,7 @@ interface FooterConfig {
     };
     navigation: {
       enabled: boolean;
+      title?: string;
       links?: Array<{ name: string; path: string }>;
     };
     contact: {
@@ -106,6 +107,11 @@ const Footer = () => {
           <div>
             {sections.navigation.enabled && sections.navigation.links && (
               <>
+                {sections.navigation.title && (
+                  <h3 className="font-accent text-base font-semibold mb-4 text-white">
+                    {sections.navigation.title}
+                  </h3>
+                )}
                 <ul className="space-y-3 font-sans text-lg">
                   {sections.navigation.links.map((link) => (
                     <li key={link.path}>

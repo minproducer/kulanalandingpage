@@ -8,6 +8,7 @@ export const footerConfig = {
     },
     navigation: {
       enabled: true,
+      title: 'Quick Links',
       links: [
         { name: 'Home', path: '/' },
         { name: 'Projects', path: '/projects' },
