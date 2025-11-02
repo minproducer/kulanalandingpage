@@ -1,0 +1,24 @@
+Pages needed:
+- landing page
+- management team
+- our projects (not published, content to be filled in later)
+- FAQ (not published, content to be filled in later)
+
+Use dummy photos for anywhere that need photos
+Landing page: Main.jpg
+
+With decades of combined experience, Kulana Development partners with investors, builders, and architects to transform concepts into high-performing assets. From feasibility and design to construction and delivery, we manage each stage with precision, integrity, and a commitment to long-term value.
+What We Deliver
+From Feasibility to Turnkey Delivery, we manage entitlements, design coordination, procurement, and site execution—one accountable team focused on outcomes that endure.
+How We Build - The Kulana Way
+Results You Can Measure — Milestone gates, cost tracking, and schedule health checks keep your project on time, on spec, and built to last.
+A Culture Built to Last
+Lessons learned feed every new project—so each delivery is stronger than the last. We put people first—safety, respect, and accountability—that’s how quality, schedule, and budget follow.
+Built for Today—and the Next Generation
+Projects that create jobs, strengthen neighborhoods, and stand up to time and weather.
+
+Management Team (ManageTeam.jpg)
+
+Our Projects (OutProject.png)
+(not published, content to be filled in later)
+display 2 projects per row - display job photo, job name, location, button "view details"
