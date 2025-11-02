@@ -17,6 +17,7 @@ const ProjectsManagement = () => {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   // Form state
   const [formData, setFormData] = useState<Project>({
@@ -62,31 +63,71 @@ const ProjectsManagement = () => {
 
     try {
       setUploadingImage(true);
+      setUploadProgress(0);
+
       const formDataUpload = new FormData();
       formDataUpload.append('image', file);
 
-      const response = await fetch('http://localhost/kulana-api/endpoints/upload-image-no-auth.php', {
-        method: 'POST',
-        body: formDataUpload,
+      // Use XMLHttpRequest for progress tracking
+      const xhr = new XMLHttpRequest();
+
+      // Track upload progress
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const percentComplete = (e.loaded / e.total) * 100;
+          setUploadProgress(Math.round(percentComplete));
+        }
       });
 
-      const result = await response.json();
+      // Handle completion
+      const uploadPromise = new Promise<{ success: boolean; url?: string; message?: string }>((resolve, reject) => {
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            try {
+              const result = JSON.parse(xhr.responseText);
+              resolve(result);
+            } catch {
+              reject(new Error('Failed to parse response'));
+            }
+          } else {
+            reject(new Error(`Upload failed with status ${xhr.status}`));
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          reject(new Error('Network error during upload'));
+        });
+
+        xhr.addEventListener('abort', () => {
+          reject(new Error('Upload cancelled'));
+        });
+      });
+
+      xhr.open('POST', 'http://localhost/kulana-api/endpoints/upload-image-no-auth.php');
+      xhr.send(formDataUpload);
+
+      const result = await uploadPromise;
 
       if (result.success) {
         // Replace preview with actual server URL
-        setFormData(prev => ({ ...prev, image: result.url }));
+        setFormData(prev => ({ ...prev, image: result.url || '' }));
+        setUploadProgress(100);
       } else {
         alert('Upload failed: ' + result.message);
         // Revert to empty if upload fails
         setFormData(prev => ({ ...prev, image: '' }));
+        setUploadProgress(0);
       }
     } catch (error) {
       console.error('Upload error:', error);
       alert('Failed to upload image');
       // Revert to empty if upload fails
       setFormData(prev => ({ ...prev, image: '' }));
+      setUploadProgress(0);
     } finally {
       setUploadingImage(false);
+      // Reset progress after a short delay
+      setTimeout(() => setUploadProgress(0), 1000);
     }
   };
 
@@ -323,10 +364,21 @@ const ProjectsManagement = () => {
                     accept="image/*"
                     onChange={handleImageUpload}
                     disabled={uploadingImage}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                   {uploadingImage && (
-                    <p className="text-sm text-blue-600 mt-2">Uploading...</p>
+                    <div className="mt-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium text-blue-700">Uploading...</span>
+                        <span className="text-sm font-medium text-blue-700">{uploadProgress}%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                        <div 
+                          className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out"
+                          style={{ width: `${uploadProgress}%` }}
+                        ></div>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
