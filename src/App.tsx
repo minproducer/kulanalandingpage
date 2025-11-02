@@ -13,6 +13,7 @@ import AdminLayout from './admin/layouts/AdminLayout';
 import Login from './admin/pages/Login';
 import Dashboard from './admin/pages/Dashboard';
 import FooterSettings from './admin/pages/FooterSettings';
+import ProjectsManagement from './admin/pages/ProjectsManagement';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -71,14 +72,7 @@ function AppContent() {
           path="/admin/projects"
           element={
             <AdminLayout>
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h1 className="font-serif text-3xl font-bold text-text-primary mb-4">
-                  Projects Management
-                </h1>
-                <p className="font-sans text-text-secondary">
-                  Projects management page coming soon...
-                </p>
-              </div>
+              <ProjectsManagement />
             </AdminLayout>
           }
         />
