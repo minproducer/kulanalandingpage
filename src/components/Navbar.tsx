@@ -33,7 +33,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center group">
             <img 
-              src="/src/assets/images/KulanaDev Logo - left.png" 
+              src="/kulana-logo.png" 
               alt="Kulana Development" 
               className="h-12 md:h-14 w-auto"
             />
