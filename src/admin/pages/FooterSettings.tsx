@@ -46,6 +46,7 @@ const FooterSettings = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [config, setConfig] = useState<FooterConfig | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -128,11 +129,55 @@ const FooterSettings = () => {
 
     try {
       setUploading(true);
+      setUploadProgress(0);
       setMessage(null);
 
-      const response = await apiService.uploadImage(file);
+      // Use XMLHttpRequest for progress tracking
+      const formData = new FormData();
+      formData.append('image', file);
 
-      if (response.success) {
+      const xhr = new XMLHttpRequest();
+
+      // Track upload progress
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const percentComplete = (e.loaded / e.total) * 100;
+          setUploadProgress(Math.round(percentComplete));
+        }
+      });
+
+      // Handle completion
+      const uploadPromise = new Promise<{ success: boolean; data?: { url: string }; message?: string }>((resolve, reject) => {
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            try {
+              const result = JSON.parse(xhr.responseText);
+              resolve(result);
+            } catch {
+              reject(new Error('Failed to parse response'));
+            }
+          } else {
+            reject(new Error(`Upload failed with status ${xhr.status}`));
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          reject(new Error('Network error during upload'));
+        });
+
+        xhr.addEventListener('abort', () => {
+          reject(new Error('Upload cancelled'));
+        });
+      });
+
+      xhr.open('POST', 'http://localhost/kulana-api/endpoints/upload-image-no-auth.php');
+      xhr.send(formData);
+
+      const response = await uploadPromise;
+
+      if (response.success && response.data) {
+        setUploadProgress(100);
+
         // Update config with new logo URL
         const newConfig = JSON.parse(JSON.stringify(config));
         newConfig.sections.companyInfo.logoUrl = response.data.url;
@@ -154,8 +199,11 @@ const FooterSettings = () => {
       console.error('Error uploading image:', error);
       const errorMessage = error instanceof Error ? error.message : 'Error uploading image';
       setMessage({ type: 'error', text: errorMessage });
+      setUploadProgress(0);
     } finally {
       setUploading(false);
+      // Reset progress after a short delay
+      setTimeout(() => setUploadProgress(0), 1000);
     }
   };
 
@@ -295,38 +343,58 @@ const FooterSettings = () => {
                         />
                       </div>
                     )}
-                    <div className="flex items-center space-x-3">
-                      <label className="flex-1">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleImageUpload}
-                          className="hidden"
-                          id="logo-upload"
-                        />
-                        <label 
-                          htmlFor="logo-upload"
-                          className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-accent font-medium text-text-primary bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold transition"
-                        >
-                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                          {uploading ? 'Uploading...' : 'Upload Logo'}
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-3">
+                        <label className="flex-1">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            disabled={uploading}
+                            className="hidden"
+                            id="logo-upload"
+                          />
+                          <label 
+                            htmlFor="logo-upload"
+                            className={`cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-accent font-medium text-text-primary bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold transition ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          >
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            {uploading ? 'Uploading...' : 'Upload Logo'}
+                          </label>
                         </label>
-                      </label>
-                      {config.sections.companyInfo.logoUrl && (
-                        <button
-                          onClick={handleRemoveLogo}
-                          disabled={saving}
-                          className="px-4 py-2 text-sm font-accent font-medium text-red-600 hover:text-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {saving ? 'Removing...' : 'Remove'}
-                        </button>
+                        {config.sections.companyInfo.logoUrl && (
+                          <button
+                            onClick={handleRemoveLogo}
+                            disabled={saving || uploading}
+                            className="px-4 py-2 text-sm font-accent font-medium text-red-600 hover:text-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {saving ? 'Removing...' : 'Remove'}
+                          </button>
+                        )}
+                      </div>
+                      
+                      {/* Upload Progress Bar */}
+                      {uploading && (
+                        <div className="w-full">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs font-medium text-gold">Uploading logo...</span>
+                            <span className="text-xs font-medium text-gold">{uploadProgress}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                            <div 
+                              className="bg-gold h-2 rounded-full transition-all duration-300 ease-out"
+                              style={{ width: `${uploadProgress}%` }}
+                            ></div>
+                          </div>
+                        </div>
                       )}
+                      
+                      <p className="text-xs text-text-secondary">
+                        PNG, JPG, GIF, WebP or SVG. Max 5MB.
+                      </p>
                     </div>
-                    <p className="mt-2 text-xs text-text-secondary">
-                      PNG, JPG, GIF, WebP or SVG. Max 5MB.
-                    </p>
                   </div>
                 </label>
               </div>
