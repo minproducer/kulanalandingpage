@@ -65,8 +65,12 @@ CREATE TABLE IF NOT EXISTS team_members (
 );
 
 -- Insert default admin user (password: kulana2025)
+-- Note: You can generate new hash by opening http://localhost/kulana-api/generate-hash.php
 INSERT INTO users (username, password, email) VALUES 
-('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin@kulana.com');
+('admin', '$2y$10$YourNewHashHere', 'admin@kulana.com');
+
+-- Alternative: Run this query to update password
+-- UPDATE users SET password = '$2y$10$[new_hash_here]' WHERE username = 'admin';
 
 -- Insert default configs
 INSERT INTO configs (config_key, config_value) VALUES
