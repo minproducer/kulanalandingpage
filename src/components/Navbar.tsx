@@ -16,9 +16,9 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
-    { name: 'Sectors', path: '/' },
+    { name: 'Home', path: '/' },
     { name: 'Projects', path: '/projects' },
-    { name: 'About', path: '/management-team' },
+    { name: 'Management Team', path: '/management-team' },
     { name: 'FAQ', path: '/faq' },
   ];
 
@@ -40,7 +40,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center space-x-6">
+          <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
               <Link
                 key={item.path}
@@ -55,11 +55,6 @@ const Navbar = () => {
                 }`}></span>
               </Link>
             ))}
-            
-            {/* Partner Button - inline with menu */}
-            <button className="bg-gold text-white font-accent font-semibold px-6 py-2.5 rounded transition-all duration-300 hover:bg-gold-light hover:shadow-lg hover:scale-105 ml-2">
-              Partner
-            </button>
           </div>
 
           {/* Mobile Menu Button */}

@@ -7,7 +7,7 @@ const ManagementTeam = () => {
       <section className="bg-navy text-white py-12 md:py-16">
         <div className="max-w-4xl mx-auto px-8 text-center">
           <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl font-bold">
-            Leadership
+            Management Team
           </h1>
         </div>
       </section>
