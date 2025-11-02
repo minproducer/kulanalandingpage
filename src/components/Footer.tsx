@@ -6,11 +6,11 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Company Info */}
-          <div>
+          <div className="flex flex-col items-center text-center">
             <img 
               src="/KulanaDev Logo - center.png" 
               alt="Kulana Development" 
-              className="h-16 w-auto mb-4"
+              className="h-40 w-auto mb-4"
             />
             <p className="font-sans text-small text-gray-300 leading-relaxed">
               Transforming concepts into high-performing assets with precision, integrity, and commitment to long-term value.
@@ -19,7 +19,7 @@ const Footer = () => {
 
           {/* Navigation */}
           <div>
-            <ul className="space-y-2 font-sans text-small">
+            <ul className="space-y-2 font-sans text-normal">
               <li>
                 <Link to="/" className="text-gray-300 hover:text-gold transition-colors">
                   Home
