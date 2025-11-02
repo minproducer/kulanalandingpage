@@ -6,24 +6,35 @@ interface FooterConfig {
   sections: {
     companyInfo: {
       enabled: boolean;
+      logo?: string;
       description?: string;
     };
     navigation: {
       enabled: boolean;
+      title?: string;
+      links?: Array<{ name: string; path: string }>;
     };
     contact: {
       enabled: boolean;
+      title?: string;
       email?: string;
       phone?: string;
       location?: string;
     };
     social: {
       enabled: boolean;
+      title?: string;
+      links?: {
+        email?: string;
+        linkedin?: string;
+        facebook?: string;
+      };
     };
   };
   copyright: {
     enabled: boolean;
     text?: string;
+    year?: number;
   };
 }
 
@@ -33,6 +44,7 @@ const FooterSettings = () => {
   const [saving, setSaving] = useState(false);
   const [config, setConfig] = useState<FooterConfig | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -74,25 +86,23 @@ const FooterSettings = () => {
     setConfig(newConfig);
   };
 
-  const handleTextChange = (section: string, field: string, value: string) => {
+  const handleContentChange = (section: string, field: string, value: string) => {
     if (!config) return;
 
-    setConfig(prev => {
-      if (!prev) return prev;
-      const newConfig = JSON.parse(JSON.stringify(prev));
-      
-      if (section === 'copyright') {
-        newConfig.copyright[field] = value;
-      } else if (section in newConfig.sections) {
-        if (!newConfig.sections[section as keyof typeof newConfig.sections][field as never]) {
-          newConfig.sections[section as keyof typeof newConfig.sections][field as never] = value as never;
-        } else {
-          newConfig.sections[section as keyof typeof newConfig.sections][field as never] = value as never;
-        }
-      }
-      
-      return newConfig;
-    });
+    const newConfig = { ...config };
+    
+    if (section === 'copyright') {
+      (newConfig.copyright as Record<string, unknown>)[field] = value;
+    } else if (section in newConfig.sections) {
+      const sectionKey = section as keyof FooterConfig['sections'];
+      (newConfig.sections[sectionKey] as Record<string, unknown>)[field] = value;
+    }
+    
+    setConfig(newConfig);
+  };
+
+  const toggleExpand = (section: string) => {
+    setExpandedSection(expandedSection === section ? null : section);
   };
 
   const handleSave = async () => {
@@ -160,10 +170,15 @@ const FooterSettings = () => {
       )}
 
       {/* Footer Sections */}
-      <div className="space-y-6">
-        {/* Company Info Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between mb-4">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 className="font-serif text-2xl font-bold text-text-primary mb-6">
+          Footer Sections
+        </h2>
+
+        <div className="space-y-4">
+          {/* Company Info */}
+          <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+            <div className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
                 <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,8 +186,8 @@ const FooterSettings = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-accent font-semibold text-text-primary text-lg">Company Info</p>
-                <p className="font-sans text-sm text-text-secondary">Logo and company description</p>
+                <p className="font-accent font-semibold text-text-primary">Company Info</p>
+                <p className="font-sans text-sm text-text-secondary">Logo and description</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -185,26 +200,9 @@ const FooterSettings = () => {
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
-          
-          {config.sections.companyInfo.enabled && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <label className="block mb-2">
-                <span className="font-accent text-sm font-semibold text-text-primary">Description</span>
-                <textarea
-                  value={config.sections.companyInfo.description || ''}
-                  onChange={(e) => handleTextChange('companyInfo', 'description', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition resize-none"
-                  rows={3}
-                  placeholder="Enter company description..."
-                />
-              </label>
-            </div>
-          )}
-        </div>
 
-        {/* Navigation Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between">
+          {/* Navigation */}
+          <div className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg hover:border-gold transition-colors">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
                 <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,7 +210,7 @@ const FooterSettings = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-accent font-semibold text-text-primary text-lg">Navigation</p>
+                <p className="font-accent font-semibold text-text-primary">Navigation</p>
                 <p className="font-sans text-sm text-text-secondary">Quick links menu</p>
               </div>
             </div>
@@ -226,11 +224,9 @@ const FooterSettings = () => {
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
-        </div>
 
-        {/* Contact Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between mb-4">
+          {/* Contact */}
+          <div className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg hover:border-gold transition-colors">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
                 <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -238,8 +234,8 @@ const FooterSettings = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-accent font-semibold text-text-primary text-lg">Contact</p>
-                <p className="font-sans text-sm text-text-secondary">Email, phone, and location</p>
+                <p className="font-accent font-semibold text-text-primary">Contact</p>
+                <p className="font-sans text-sm text-text-secondary">Email, phone, location</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -252,46 +248,9 @@ const FooterSettings = () => {
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
-          
-          {config.sections.contact.enabled && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
-              <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Email</span>
-                <input
-                  type="email"
-                  value={config.sections.contact.email || ''}
-                  onChange={(e) => handleTextChange('contact', 'email', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
-                  placeholder="info@example.com"
-                />
-              </label>
-              <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Phone</span>
-                <input
-                  type="tel"
-                  value={config.sections.contact.phone || ''}
-                  onChange={(e) => handleTextChange('contact', 'phone', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
-                  placeholder="(555) 123-4567"
-                />
-              </label>
-              <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Location</span>
-                <input
-                  type="text"
-                  value={config.sections.contact.location || ''}
-                  onChange={(e) => handleTextChange('contact', 'location', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
-                  placeholder="Texas & Southeast"
-                />
-              </label>
-            </div>
-          )}
-        </div>
 
-        {/* Social Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between">
+          {/* Social */}
+          <div className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg hover:border-gold transition-colors">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
                 <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -299,7 +258,7 @@ const FooterSettings = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-accent font-semibold text-text-primary text-lg">Social Media</p>
+                <p className="font-accent font-semibold text-text-primary">Social Media</p>
                 <p className="font-sans text-sm text-text-secondary">Social media links</p>
               </div>
             </div>
@@ -313,11 +272,9 @@ const FooterSettings = () => {
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
-        </div>
 
-        {/* Copyright Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between mb-4">
+          {/* Copyright */}
+          <div className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg hover:border-gold transition-colors">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
                 <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -325,8 +282,8 @@ const FooterSettings = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-accent font-semibold text-text-primary text-lg">Copyright</p>
-                <p className="font-sans text-sm text-text-secondary">Copyright notice text</p>
+                <p className="font-accent font-semibold text-text-primary">Copyright</p>
+                <p className="font-sans text-sm text-text-secondary">Copyright notice</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -339,26 +296,35 @@ const FooterSettings = () => {
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
-          
-          {config.copyright.enabled && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Copyright Text</span>
-                <input
-                  type="text"
-                  value={config.copyright.text || ''}
-                  onChange={(e) => handleTextChange('copyright', 'text', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
-                  placeholder="Kulana Development"
-                />
-              </label>
-            </div>
-          )}
+        </div>
+      </div>
+
+      {/* Preview */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 className="font-serif text-2xl font-bold text-text-primary mb-4">
+          Preview
+        </h2>
+        <div className="bg-gray-50 p-4 rounded-lg border-2 border-dashed border-gray-300">
+          <p className="font-sans text-sm text-text-secondary text-center">
+            Preview will be visible on the public website after saving
+          </p>
+          <div className="mt-4 space-y-2 text-sm">
+            <p className="font-sans">
+              <span className="font-semibold">Enabled sections:</span>{' '}
+              {[
+                config.sections.companyInfo.enabled && 'Company Info',
+                config.sections.navigation.enabled && 'Navigation',
+                config.sections.contact.enabled && 'Contact',
+                config.sections.social.enabled && 'Social',
+                config.copyright.enabled && 'Copyright'
+              ].filter(Boolean).join(', ') || 'None'}
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Save Button */}
-      <div className="flex items-center justify-between mt-8">
+      <div className="flex items-center justify-between">
         <a
           href="/"
           target="_blank"
@@ -374,24 +340,9 @@ const FooterSettings = () => {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="bg-gold hover:bg-gold-light text-white font-accent font-semibold px-8 py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          className="bg-gold hover:bg-gold-light text-white font-accent font-semibold px-8 py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {saving ? (
-            <>
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Saving...
-            </>
-          ) : (
-            <>
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              Save Changes
-            </>
-          )}
+          {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </div>
     </div>
