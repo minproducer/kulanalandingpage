@@ -72,7 +72,8 @@ export const apiService = {
       formData.append('image', file);
 
       const token = getAuthToken();
-      const response = await fetch(`${API_BASE_URL}/upload-image.php`, {
+      // Try no-auth version first for testing
+      const response = await fetch(`${API_BASE_URL}/upload-image-no-auth.php`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

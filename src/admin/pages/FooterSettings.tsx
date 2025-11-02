@@ -11,20 +11,30 @@ interface FooterConfig {
     };
     navigation: {
       enabled: boolean;
+      title?: string;
+      links?: Array<{ name: string; path: string }>;
     };
     contact: {
       enabled: boolean;
+      title?: string;
       email?: string;
       phone?: string;
       location?: string;
     };
     social: {
       enabled: boolean;
+      title?: string;
+      links?: {
+        email?: string;
+        linkedin?: string;
+        facebook?: string;
+      };
     };
   };
   copyright: {
     enabled: boolean;
     text?: string;
+    year?: number;
   };
 }
 
@@ -76,7 +86,7 @@ const FooterSettings = () => {
     setConfig(newConfig);
   };
 
-  const handleTextChange = (section: string, field: string, value: string) => {
+  const handleTextChange = (section: string, field: string, value: string | number) => {
     if (!config) return;
 
     setConfig(prev => {
@@ -335,7 +345,7 @@ const FooterSettings = () => {
 
         {/* Navigation Section */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
                 <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -357,6 +367,17 @@ const FooterSettings = () => {
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
+          
+          {config.sections.navigation.enabled && (
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="font-accent text-sm font-semibold text-text-primary mb-2">
+                Note: Navigation links are managed in the code. You can only toggle visibility here.
+              </p>
+              <p className="text-xs text-text-secondary">
+                Current links: Home, Projects, Management Team, FAQ
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Contact Section */}
@@ -386,6 +407,16 @@ const FooterSettings = () => {
           
           {config.sections.contact.enabled && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
+              <label className="block">
+                <span className="font-accent text-sm font-semibold text-text-primary">Title</span>
+                <input
+                  type="text"
+                  value={config.sections.contact.title || ''}
+                  onChange={(e) => handleTextChange('contact', 'title', e.target.value)}
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  placeholder="Contact"
+                />
+              </label>
               <label className="block">
                 <span className="font-accent text-sm font-semibold text-text-primary">Email</span>
                 <input
@@ -422,7 +453,7 @@ const FooterSettings = () => {
 
         {/* Social Section */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
                 <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -444,6 +475,72 @@ const FooterSettings = () => {
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
+          
+          {config.sections.social.enabled && (
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
+              <label className="block">
+                <span className="font-accent text-sm font-semibold text-text-primary">Title</span>
+                <input
+                  type="text"
+                  value={config.sections.social.title || ''}
+                  onChange={(e) => handleTextChange('social', 'title', e.target.value)}
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  placeholder="Follow Us"
+                />
+              </label>
+              <label className="block">
+                <span className="font-accent text-sm font-semibold text-text-primary">Email Link</span>
+                <input
+                  type="url"
+                  value={config.sections.social.links?.email || ''}
+                  onChange={(e) => {
+                    const newConfig = JSON.parse(JSON.stringify(config));
+                    if (!newConfig.sections.social.links) {
+                      newConfig.sections.social.links = {};
+                    }
+                    newConfig.sections.social.links.email = e.target.value;
+                    setConfig(newConfig);
+                  }}
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  placeholder="mailto:info@example.com or #"
+                />
+              </label>
+              <label className="block">
+                <span className="font-accent text-sm font-semibold text-text-primary">LinkedIn URL</span>
+                <input
+                  type="url"
+                  value={config.sections.social.links?.linkedin || ''}
+                  onChange={(e) => {
+                    const newConfig = JSON.parse(JSON.stringify(config));
+                    if (!newConfig.sections.social.links) {
+                      newConfig.sections.social.links = {};
+                    }
+                    newConfig.sections.social.links.linkedin = e.target.value;
+                    setConfig(newConfig);
+                  }}
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  placeholder="https://linkedin.com/company/yourcompany"
+                />
+              </label>
+              <label className="block">
+                <span className="font-accent text-sm font-semibold text-text-primary">Facebook URL</span>
+                <input
+                  type="url"
+                  value={config.sections.social.links?.facebook || ''}
+                  onChange={(e) => {
+                    const newConfig = JSON.parse(JSON.stringify(config));
+                    if (!newConfig.sections.social.links) {
+                      newConfig.sections.social.links = {};
+                    }
+                    newConfig.sections.social.links.facebook = e.target.value;
+                    setConfig(newConfig);
+                  }}
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  placeholder="https://facebook.com/yourpage"
+                />
+              </label>
+            </div>
+          )}
         </div>
 
         {/* Copyright Section */}
@@ -472,7 +569,19 @@ const FooterSettings = () => {
           </div>
           
           {config.copyright.enabled && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
+              <label className="block">
+                <span className="font-accent text-sm font-semibold text-text-primary">Year</span>
+                <input
+                  type="number"
+                  value={config.copyright.year || new Date().getFullYear()}
+                  onChange={(e) => handleTextChange('copyright', 'year', parseInt(e.target.value))}
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  placeholder="2025"
+                  min="2000"
+                  max="2099"
+                />
+              </label>
               <label className="block">
                 <span className="font-accent text-sm font-semibold text-text-primary">Copyright Text</span>
                 <input

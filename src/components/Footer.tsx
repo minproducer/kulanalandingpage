@@ -169,7 +169,7 @@ const Footer = () => {
         {copyright.enabled && (
           <div className="border-t border-navy-light pt-8 text-center">
             <p className="font-sans text-small text-gray-400">
-              &copy; {copyright.year} <span className="text-gold font-semibold">{copyright.text}</span>. All rights reserved.
+              &copy; {copyright.year || new Date().getFullYear()} <span className="text-gold font-semibold">{copyright.text}</span>. All rights reserved.
             </p>
           </div>
         )}
