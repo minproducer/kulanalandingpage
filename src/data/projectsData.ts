@@ -13,7 +13,7 @@ export const projects: Project[] = [
     id: 1,
     name: 'Coming Soon',
     location: 'Missouri',
-    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80',
     description: 'Premium apartment development project in progress',
     status: 'In Progress',
   },
