@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
     <footer className="bg-navy text-white">
-      <div className="max-w-7xl mx-auto px-8 py-16">
+      <div className="max-w-7xl mx-auto px-8 py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Company Info */}
-          <div className="flex flex-col items-center text-center">
+          <div className="flex flex-col items-center text-left pr-8">
             <img 
               src="/KulanaDev Logo - center.png" 
               alt="Kulana Development" 
@@ -19,25 +19,29 @@ const Footer = () => {
 
           {/* Navigation */}
           <div>
-            <ul className="space-y-2 font-sans text-normal">
+            <ul className="space-y-3 font-sans text-lg">
               <li>
-                <Link to="/" className="text-gray-300 hover:text-gold transition-colors">
+                <Link to="/" className="relative inline-block text-gray-300 hover:text-gold transition-colors group">
                   Home
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
                 </Link>
               </li>
               <li>
-                <Link to="/projects" className="text-gray-300 hover:text-gold transition-colors">
+                <Link to="/projects" className="relative inline-block text-gray-300 hover:text-gold transition-colors group">
                   Projects
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
                 </Link>
               </li>
               <li>
-                <Link to="/management-team" className="text-gray-300 hover:text-gold transition-colors">
+                <Link to="/management-team" className="relative inline-block text-gray-300 hover:text-gold transition-colors group">
                   Management Team
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-gold transition-colors">
+                <Link to="/faq" className="relative inline-block text-gray-300 hover:text-gold transition-colors group">
                   FAQ
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
                 </Link>
               </li>
             </ul>
