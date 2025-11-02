@@ -18,6 +18,8 @@ const ProjectsManagement = () => {
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   // Form state
   const [formData, setFormData] = useState<Project>({
@@ -134,23 +136,27 @@ const ProjectsManagement = () => {
   const handleSaveProject = async () => {
     // Validation
     if (!formData.name || !formData.location || !formData.image || !formData.description) {
-      alert('Please fill in all required fields (Name, Location, Image, Description)');
+      setNotification({ type: 'error', message: 'Please fill in all required fields (Name, Location, Image, Description)' });
+      setTimeout(() => setNotification(null), 3000);
       return;
     }
 
     // Check if image is still uploading
     if (uploadingImage) {
-      alert('Please wait for image upload to complete');
+      setNotification({ type: 'error', message: 'Please wait for image upload to complete' });
+      setTimeout(() => setNotification(null), 3000);
       return;
     }
 
     // Check if image is base64 (local preview) instead of server URL
     if (formData.image.startsWith('data:')) {
-      alert('Please wait for image upload to complete. If upload failed, try selecting the image again.');
+      setNotification({ type: 'error', message: 'Please wait for image upload to complete. If upload failed, try selecting the image again.' });
+      setTimeout(() => setNotification(null), 3000);
       return;
     }
 
     try {
+      setSaving(true);
       let updatedProjects: Project[];
 
       if (isAddingNew) {
@@ -167,13 +173,30 @@ const ProjectsManagement = () => {
         return;
       }
 
+      // Add 1.5 second delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       await apiService.updateConfig('projects', { projects: updatedProjects });
       setProjects(updatedProjects);
-      handleCancelEdit();
-      alert('Project saved successfully!');
+      
+      // Show success notification
+      setNotification({ 
+        type: 'success', 
+        message: isAddingNew ? 'Project added successfully!' : 'Project updated successfully!' 
+      });
+      
+      // Close form and clear notification after 3 seconds
+      setTimeout(() => {
+        handleCancelEdit();
+        setNotification(null);
+      }, 3000);
+      
     } catch (error) {
       console.error('Error saving project:', error);
-      alert('Failed to save project');
+      setNotification({ type: 'error', message: 'Failed to save project. Please try again.' });
+      setTimeout(() => setNotification(null), 3000);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -181,13 +204,23 @@ const ProjectsManagement = () => {
     if (!confirm('Are you sure you want to delete this project?')) return;
 
     try {
+      setSaving(true);
+      
+      // Add 1 second delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       const updatedProjects = projects.filter(p => p.id !== projectId);
       await apiService.updateConfig('projects', { projects: updatedProjects });
       setProjects(updatedProjects);
-      alert('Project deleted successfully!');
+      
+      setNotification({ type: 'success', message: 'Project deleted successfully!' });
+      setTimeout(() => setNotification(null), 3000);
     } catch (error) {
       console.error('Error deleting project:', error);
-      alert('Failed to delete project');
+      setNotification({ type: 'error', message: 'Failed to delete project. Please try again.' });
+      setTimeout(() => setNotification(null), 3000);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -235,6 +268,51 @@ const ProjectsManagement = () => {
 
   return (
     <div className="p-8">
+      {/* Notification Popup */}
+      {notification && (
+        <div className={`fixed top-4 right-4 z-50 max-w-md w-full transform transition-all duration-300 ease-in-out ${
+          notification ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+        }`}>
+          <div className={`rounded-lg shadow-lg p-4 flex items-start gap-3 ${
+            notification.type === 'success' 
+              ? 'bg-green-50 border-l-4 border-green-500' 
+              : 'bg-red-50 border-l-4 border-red-500'
+          }`}>
+            {notification.type === 'success' ? (
+              <svg className="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            )}
+            <div className="flex-1">
+              <p className={`font-semibold ${
+                notification.type === 'success' ? 'text-green-800' : 'text-red-800'
+              }`}>
+                {notification.type === 'success' ? 'Success!' : 'Error!'}
+              </p>
+              <p className={`text-sm mt-1 ${
+                notification.type === 'success' ? 'text-green-700' : 'text-red-700'
+              }`}>
+                {notification.message}
+              </p>
+            </div>
+            <button
+              onClick={() => setNotification(null)}
+              className={`flex-shrink-0 ${
+                notification.type === 'success' ? 'text-green-500 hover:text-green-700' : 'text-red-500 hover:text-red-700'
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -244,7 +322,8 @@ const ProjectsManagement = () => {
           </div>
           <button
             onClick={handleAddNew}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold flex items-center gap-2"
+            disabled={saving}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -389,20 +468,21 @@ const ProjectsManagement = () => {
           <div className="flex gap-4 mt-6">
             <button
               onClick={handleSaveProject}
-              disabled={!formData.name || !formData.location || !formData.image || !formData.description || uploadingImage}
+              disabled={!formData.name || !formData.location || !formData.image || !formData.description || uploadingImage || saving}
               className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
             >
-              {uploadingImage && (
+              {(uploadingImage || saving) && (
                 <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               )}
-              {uploadingImage ? 'Uploading Image...' : 'Save Project'}
+              {uploadingImage ? 'Uploading Image...' : saving ? 'Saving...' : 'Save Project'}
             </button>
             <button
               onClick={handleCancelEdit}
-              className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-200 font-semibold"
+              disabled={saving}
+              className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-200 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
