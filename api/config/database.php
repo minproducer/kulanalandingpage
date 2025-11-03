@@ -1,9 +1,10 @@
 <?php
 class Database {
-    private $host = "localhost";
+    // Production settings for GoDaddy hosting
+    private $host = "localhost"; // Usually "localhost" on GoDaddy
     private $db_name = "kulana_dev";
-    private $username = "root";
-    private $password = "";
+    private $username = "kulanadev";
+    private $password = "Kulana@2025";
     public $conn;
 
     public function getConnection() {

@@ -1,9 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { apiService } from '../services/apiService';
+
+interface PageSettings {
+  home: boolean;
+  team: boolean;
+  projects: boolean;
+  faq: boolean;
+}
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [pageSettings, setPageSettings] = useState<PageSettings>({
+    home: true,
+    team: true,
+    projects: true,
+    faq: true,
+  });
   const location = useLocation();
 
   useEffect(() => {
@@ -15,12 +29,29 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { name: 'Home', path: '/' },
-    { name: 'Projects', path: '/projects' },
-    { name: 'Management Team', path: '/management-team' },
-    { name: 'FAQ', path: '/faq' },
+  useEffect(() => {
+    const fetchPageSettings = async () => {
+      try {
+        const response = await apiService.getConfig('page_settings');
+        if (response.data?.value) {
+          setPageSettings(response.data.value);
+        }
+      } catch (error) {
+        console.error('Error fetching page settings:', error);
+      }
+    };
+    fetchPageSettings();
+  }, []);
+
+  const allNavItems = [
+    { name: 'Home', path: '/', key: 'home' as keyof PageSettings },
+    { name: 'Projects', path: '/projects', key: 'projects' as keyof PageSettings },
+    { name: 'Management Team', path: '/management-team', key: 'team' as keyof PageSettings },
+    { name: 'FAQ', path: '/faq', key: 'faq' as keyof PageSettings },
   ];
+
+  // Filter nav items based on page settings
+  const navItems = allNavItems.filter(item => pageSettings[item.key]);
 
   const isActive = (path: string) => location.pathname === path;
 

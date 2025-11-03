@@ -6,6 +6,13 @@ export interface Project {
   description: string;
   status: string;
   size?: string;
+  link?: string;
+  // Detail fields
+  detailDescription?: string;
+  completionDate?: string;
+  clientName?: string;
+  imageGallery?: string[];
+  specifications?: Array<{ key: string; value: string }>;
 }
 
 export const projects: Project[] = [

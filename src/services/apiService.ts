@@ -1,5 +1,16 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost/kulana-api/endpoints';
+const API_BASE_URL = 'https://kulanadevelopment.com/api/endpoints';
+
+// Export API URLs for direct use in components (XMLHttpRequest, etc.)
+export const API_ENDPOINTS = {
+  BASE_URL: API_BASE_URL,
+  LOGIN: `${API_BASE_URL}/login.php`,
+  GET_CONFIG: `${API_BASE_URL}/get-config.php`,
+  UPDATE_CONFIG: `${API_BASE_URL}/update-config-secure.php`,
+  UPLOAD_IMAGE: `${API_BASE_URL}/upload-image-secure.php`,
+  HASH_PASSWORD: `${API_BASE_URL}/hash-password.php`,
+  RESET_PASSWORD: `${API_BASE_URL}/reset-password.php`,
+};
 
 // API Service
 export const apiService = {
@@ -15,6 +26,16 @@ export const apiService = {
       });
 
       const data = await response.json();
+      
+      // Store token and user info on successful login
+      if (data.success && data.data?.token) {
+        setAuthToken(data.data.token);
+        setUserInfo({
+          user_id: data.data.user_id,
+          username: data.data.username
+        });
+      }
+      
       return data;
     } catch (error) {
       console.error('Login error:', error);
@@ -49,15 +70,24 @@ export const apiService = {
   // Update config
   async updateConfig(key: string, value: unknown) {
     try {
-      const response = await fetch(`${API_BASE_URL}/update-config.php`, {
+      const token = getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/update-config-secure.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ key, value }),
       });
 
       const data = await response.json();
+      
+      // If unauthorized, clear token and redirect to login
+      if (response.status === 401) {
+        clearAuthToken();
+        window.location.href = '/admin/login';
+      }
+      
       return data;
     } catch (error) {
       console.error('Update config error:', error);
@@ -72,8 +102,7 @@ export const apiService = {
       formData.append('image', file);
 
       const token = getAuthToken();
-      // Try no-auth version first for testing
-      const response = await fetch(`${API_BASE_URL}/upload-image-no-auth.php`, {
+      const response = await fetch(`${API_BASE_URL}/upload-image-secure.php`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -83,6 +112,11 @@ export const apiService = {
 
       // Check if response is OK
       if (!response.ok) {
+        if (response.status === 401) {
+          clearAuthToken();
+          window.location.href = '/admin/login';
+          throw new Error('Authentication required');
+        }
         const text = await response.text();
         console.error('Upload response error:', text);
         throw new Error(`HTTP error! status: ${response.status}`);

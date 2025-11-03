@@ -1,20 +1,14 @@
 import { useState, useEffect } from 'react';
 import { apiService } from '../services/apiService';
-
-interface Project {
-  id: number;
-  name: string;
-  location: string;
-  image: string;
-  description: string;
-  status: string;
-  size?: string;
-}
+import type { Project } from '../data/projectsData';
+import ProjectDetailModal from '../components/ProjectDetailModal';
 
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchProjects();
@@ -152,7 +146,13 @@ const Projects = () => {
                     )}
                   </div>
                   
-                  <button className="w-full bg-navy text-white font-accent font-semibold px-6 py-3 rounded hover:bg-navy-light transition-colors duration-300">
+                  <button
+                    onClick={() => {
+                      setSelectedProject(project);
+                      setIsModalOpen(true);
+                    }}
+                    className="block w-full bg-navy text-white font-accent font-semibold px-6 py-3 rounded hover:bg-navy-light transition-colors duration-300 text-center"
+                  >
                     View Project
                   </button>
                 </div>
@@ -162,6 +162,18 @@ const Projects = () => {
           )}
         </div>
       </section>
+
+      {/* Project Detail Modal */}
+      {selectedProject && (
+        <ProjectDetailModal
+          project={selectedProject}
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedProject(null);
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiService } from '../../services/apiService';
+import { apiService, API_ENDPOINTS } from '../../services/apiService';
 
 interface Project {
   id: number;
@@ -9,6 +9,13 @@ interface Project {
   description: string;
   status: string;
   size?: string;
+  link?: string;
+  // Detail fields
+  detailDescription?: string;
+  completionDate?: string;
+  clientName?: string;
+  imageGallery?: string[];
+  specifications?: Array<{ key: string; value: string }>;
 }
 
 const ProjectsManagement = () => {
@@ -18,6 +25,8 @@ const ProjectsManagement = () => {
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
+  const [galleryUploadProgress, setGalleryUploadProgress] = useState(0);
   const [saving, setSaving] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
@@ -30,6 +39,12 @@ const ProjectsManagement = () => {
     description: '',
     status: 'In Progress',
     size: '',
+    link: '',
+    detailDescription: '',
+    completionDate: '',
+    clientName: '',
+    imageGallery: [],
+    specifications: [],
   });
 
   useEffect(() => {
@@ -39,10 +54,19 @@ const ProjectsManagement = () => {
   const fetchProjects = async () => {
     try {
       setIsLoading(true);
-      const data = await apiService.getConfig('projects');
-      setProjects(data.projects || []);
+      const response = await apiService.getConfig('projects');
+      console.log('📦 Fetched projects response:', response);
+      
+      if (response.success && response.data?.value?.projects) {
+        setProjects(response.data.value.projects);
+        console.log('✅ Projects loaded:', response.data.value.projects.length);
+      } else {
+        console.warn('⚠️ No projects found in response');
+        setProjects([]);
+      }
     } catch (error) {
-      console.error('Error fetching projects:', error);
+      console.error('❌ Error fetching projects:', error);
+      setProjects([]);
     } finally {
       setIsLoading(false);
     }
@@ -56,16 +80,19 @@ const ProjectsManagement = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Show preview immediately
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFormData(prev => ({ ...prev, image: reader.result as string }));
-    };
-    reader.readAsDataURL(file);
+    console.log('🖼️ Starting image upload:', file.name, file.type, file.size);
 
     try {
       setUploadingImage(true);
       setUploadProgress(0);
+
+      // Show preview immediately using FileReader
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        console.log('✅ Preview loaded (base64)');
+        setFormData(prev => ({ ...prev, image: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
 
       const formDataUpload = new FormData();
       formDataUpload.append('image', file);
@@ -77,12 +104,99 @@ const ProjectsManagement = () => {
       xhr.upload.addEventListener('progress', (e) => {
         if (e.lengthComputable) {
           const percentComplete = (e.loaded / e.total) * 100;
+          console.log('📊 Upload progress:', Math.round(percentComplete) + '%');
           setUploadProgress(Math.round(percentComplete));
         }
       });
 
       // Handle completion
-      const uploadPromise = new Promise<{ success: boolean; url?: string; message?: string }>((resolve, reject) => {
+      const uploadPromise = new Promise<{ success: boolean; data?: { url: string }; message?: string }>((resolve, reject) => {
+        xhr.addEventListener('load', () => {
+          console.log('📥 Server response status:', xhr.status);
+          console.log('📥 Server response:', xhr.responseText);
+          if (xhr.status === 200) {
+            try {
+              const result = JSON.parse(xhr.responseText);
+              resolve(result);
+            } catch (err) {
+              console.error('❌ Failed to parse JSON:', err);
+              reject(new Error('Failed to parse response'));
+            }
+          } else {
+            reject(new Error(`Upload failed with status ${xhr.status}`));
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          console.error('❌ Network error during upload');
+          reject(new Error('Network error during upload'));
+        });
+
+        xhr.addEventListener('abort', () => {
+          console.error('❌ Upload cancelled');
+          reject(new Error('Upload cancelled'));
+        });
+      });
+
+      // Get auth token
+      const token = localStorage.getItem('adminToken');
+      
+      xhr.open('POST', API_ENDPOINTS.UPLOAD_IMAGE);
+      if (token) {
+        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+      }
+      xhr.send(formDataUpload);
+
+      const result = await uploadPromise;
+      console.log('🎉 Upload result:', result);
+
+      if (result.success && result.data?.url) {
+        console.log('✅ Upload successful! Server URL:', result.data.url);
+        // Replace preview with actual server URL
+        setFormData(prev => ({ ...prev, image: result.data?.url || '' }));
+      } else {
+        console.error('❌ Upload failed:', result.message);
+        setNotification({ type: 'error', message: 'Upload failed: ' + (result.message || 'Unknown error') });
+        setTimeout(() => setNotification(null), 3000);
+        // Keep the preview but mark as failed
+        setFormData(prev => ({ ...prev, image: '' }));
+      }
+    } catch (error) {
+      console.error('❌ Upload error:', error);
+      setNotification({ type: 'error', message: 'Failed to upload image. Please try again.' });
+      setTimeout(() => setNotification(null), 3000);
+      // Revert to empty if upload fails
+      setFormData(prev => ({ ...prev, image: '' }));
+    } finally {
+      setUploadingImage(false);
+      console.log('🏁 Upload process finished');
+      // Keep progress at 100% for a moment before resetting
+      setTimeout(() => setUploadProgress(0), 2000);
+    }
+  };
+
+  // Gallery image upload
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setUploadingGallery(true);
+      setGalleryUploadProgress(0);
+
+      const formDataUpload = new FormData();
+      formDataUpload.append('image', file);
+
+      const xhr = new XMLHttpRequest();
+
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const percentComplete = (e.loaded / e.total) * 100;
+          setGalleryUploadProgress(Math.round(percentComplete));
+        }
+      });
+
+      const uploadPromise = new Promise<{ success: boolean; data?: { url: string }; message?: string }>((resolve, reject) => {
         xhr.addEventListener('load', () => {
           if (xhr.status === 200) {
             try {
@@ -96,41 +210,72 @@ const ProjectsManagement = () => {
           }
         });
 
-        xhr.addEventListener('error', () => {
-          reject(new Error('Network error during upload'));
-        });
-
-        xhr.addEventListener('abort', () => {
-          reject(new Error('Upload cancelled'));
-        });
+        xhr.addEventListener('error', () => reject(new Error('Network error')));
+        xhr.addEventListener('abort', () => reject(new Error('Upload cancelled')));
       });
 
-      xhr.open('POST', 'http://localhost/kulana-api/endpoints/upload-image-no-auth.php');
+      const token = localStorage.getItem('adminToken');
+      
+      xhr.open('POST', API_ENDPOINTS.UPLOAD_IMAGE);
+      if (token) {
+        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+      }
       xhr.send(formDataUpload);
 
       const result = await uploadPromise;
 
-      if (result.success) {
-        // Replace preview with actual server URL
-        setFormData(prev => ({ ...prev, image: result.url || '' }));
-        setUploadProgress(100);
+      if (result.success && result.data?.url) {
+        setFormData(prev => ({
+          ...prev,
+          imageGallery: [...(prev.imageGallery || []), result.data?.url || '']
+        }));
+        setNotification({ type: 'success', message: 'Gallery image uploaded!' });
+        setTimeout(() => setNotification(null), 2000);
       } else {
-        alert('Upload failed: ' + result.message);
-        // Revert to empty if upload fails
-        setFormData(prev => ({ ...prev, image: '' }));
-        setUploadProgress(0);
+        setNotification({ type: 'error', message: 'Upload failed: ' + (result.message || 'Unknown error') });
+        setTimeout(() => setNotification(null), 3000);
       }
     } catch (error) {
-      console.error('Upload error:', error);
-      alert('Failed to upload image');
-      // Revert to empty if upload fails
-      setFormData(prev => ({ ...prev, image: '' }));
-      setUploadProgress(0);
+      console.error('Gallery upload error:', error);
+      setNotification({ type: 'error', message: 'Failed to upload gallery image' });
+      setTimeout(() => setNotification(null), 3000);
     } finally {
-      setUploadingImage(false);
-      // Reset progress after a short delay
-      setTimeout(() => setUploadProgress(0), 1000);
+      setUploadingGallery(false);
+      setTimeout(() => setGalleryUploadProgress(0), 2000);
+      // Reset file input
+      e.target.value = '';
     }
+  };
+
+  const handleRemoveGalleryImage = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      imageGallery: prev.imageGallery?.filter((_, i) => i !== index) || []
+    }));
+  };
+
+  // Specifications management
+  const handleAddSpecification = () => {
+    setFormData(prev => ({
+      ...prev,
+      specifications: [...(prev.specifications || []), { key: '', value: '' }]
+    }));
+  };
+
+  const handleUpdateSpecification = (index: number, field: 'key' | 'value', value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      specifications: prev.specifications?.map((spec, i) =>
+        i === index ? { ...spec, [field]: value } : spec
+      ) || []
+    }));
+  };
+
+  const handleRemoveSpecification = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      specifications: prev.specifications?.filter((_, i) => i !== index) || []
+    }));
   };
 
   const handleSaveProject = async () => {
@@ -241,6 +386,7 @@ const ProjectsManagement = () => {
       description: '',
       status: 'In Progress',
       size: '',
+      link: '',
     });
   };
 
@@ -255,6 +401,7 @@ const ProjectsManagement = () => {
       description: '',
       status: 'In Progress',
       size: '',
+      link: '',
     });
   };
 
@@ -400,6 +547,20 @@ const ProjectsManagement = () => {
               />
             </div>
 
+            {/* Project Link */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Project Link (Optional)
+              </label>
+              <input
+                type="url"
+                value={formData.link || ''}
+                onChange={(e) => handleInputChange('link', e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="https://example.com/project-details"
+              />
+            </div>
+
             {/* Description */}
             <div className="md:col-span-2">
               <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -411,6 +572,48 @@ const ProjectsManagement = () => {
                 rows={3}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter project description"
+              />
+            </div>
+
+            {/* Detail Description */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Detailed Description (Optional)
+              </label>
+              <textarea
+                value={formData.detailDescription || ''}
+                onChange={(e) => handleInputChange('detailDescription', e.target.value)}
+                rows={5}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Enter detailed project description (shown in modal)"
+              />
+            </div>
+
+            {/* Completion Date */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Completion Date (Optional)
+              </label>
+              <input
+                type="text"
+                value={formData.completionDate || ''}
+                onChange={(e) => handleInputChange('completionDate', e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="e.g., December 2024"
+              />
+            </div>
+
+            {/* Client Name */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Client Name (Optional)
+              </label>
+              <input
+                type="text"
+                value={formData.clientName || ''}
+                onChange={(e) => handleInputChange('clientName', e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Enter client name"
               />
             </div>
 
@@ -461,6 +664,129 @@ const ProjectsManagement = () => {
                   )}
                 </div>
               </div>
+            </div>
+
+            {/* Image Gallery Upload */}
+            <div className="md:col-span-2 border-t pt-6">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Image Gallery (Optional)
+              </label>
+              <p className="text-xs text-gray-500 mb-3">Upload additional images for the project detail modal</p>
+              
+              {/* Gallery Images Grid */}
+              {formData.imageGallery && formData.imageGallery.length > 0 && (
+                <div className="grid grid-cols-3 md:grid-cols-5 gap-3 mb-4">
+                  {formData.imageGallery.map((img, index) => (
+                    <div key={index} className="relative group">
+                      <img
+                        src={img}
+                        alt={`Gallery ${index + 1}`}
+                        className="w-full h-24 object-cover rounded-lg border-2 border-gray-200"
+                      />
+                      <button
+                        onClick={() => handleRemoveGalleryImage(index)}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                      <div className="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded">
+                        {index + 1}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Upload Button */}
+              <div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleGalleryUpload}
+                  disabled={uploadingGallery}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+                {uploadingGallery && (
+                  <div className="mt-3">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-medium text-purple-700">Uploading gallery image...</span>
+                      <span className="text-sm font-medium text-purple-700">{galleryUploadProgress}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                      <div 
+                        className="bg-purple-600 h-2.5 rounded-full transition-all duration-300 ease-out"
+                        style={{ width: `${galleryUploadProgress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Specifications Editor */}
+            <div className="md:col-span-2 border-t pt-6">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700">
+                    Project Specifications (Optional)
+                  </label>
+                  <p className="text-xs text-gray-500 mt-1">Add technical details and features</p>
+                </div>
+                <button
+                  onClick={handleAddSpecification}
+                  type="button"
+                  className="flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Add Spec
+                </button>
+              </div>
+
+              {/* Specifications List */}
+              {formData.specifications && formData.specifications.length > 0 ? (
+                <div className="space-y-3">
+                  {formData.specifications.map((spec, index) => (
+                    <div key={index} className="flex gap-2 items-start p-3 bg-gray-50 rounded-lg">
+                      <div className="flex-1 grid grid-cols-2 gap-2">
+                        <input
+                          type="text"
+                          value={spec.key}
+                          onChange={(e) => handleUpdateSpecification(index, 'key', e.target.value)}
+                          placeholder="Key (e.g., Total Floors)"
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                        />
+                        <input
+                          type="text"
+                          value={spec.value}
+                          onChange={(e) => handleUpdateSpecification(index, 'value', e.target.value)}
+                          placeholder="Value (e.g., 12 floors)"
+                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                        />
+                      </div>
+                      <button
+                        onClick={() => handleRemoveSpecification(index)}
+                        type="button"
+                        className="flex-shrink-0 p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-6 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                  <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <p className="text-sm text-gray-500">No specifications yet. Click "Add Spec" to add one.</p>
+                </div>
+              )}
             </div>
           </div>
 

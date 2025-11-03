@@ -1,14 +1,25 @@
 # Enable RewriteEngine
 RewriteEngine On
 
-# Allow CORS
-Header set Access-Control-Allow-Origin "*"
-Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+# CORS is handled by cors.php - remove conflicting headers
+# Header set Access-Control-Allow-Origin "*"
+# Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+# Header set Access-Control-Allow-Headers "Content-Type, Authorization"
 
 # Prevent directory listing
 Options -Indexes
 
+# Prevent direct access to config files
+<FilesMatch "^(database|cors)\.php$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
 # Error handling
 php_flag display_errors Off
 php_flag log_errors On
+
+# Set max upload size
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+php_value memory_limit 128M

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiService, isAuthenticated } from '../../services/apiService';
+import { apiService, isAuthenticated, API_ENDPOINTS } from '../../services/apiService';
 
 interface FooterConfig {
   sections: {
@@ -170,7 +170,12 @@ const FooterSettings = () => {
         });
       });
 
-      xhr.open('POST', 'http://localhost/kulana-api/endpoints/upload-image-no-auth.php');
+      const token = localStorage.getItem('adminToken');
+      
+      xhr.open('POST', API_ENDPOINTS.UPLOAD_IMAGE);
+      if (token) {
+        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+      }
       xhr.send(formData);
 
       const response = await uploadPromise;

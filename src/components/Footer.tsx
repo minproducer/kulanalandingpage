@@ -42,12 +42,26 @@ interface FooterConfig {
   };
 }
 
+interface PageSettings {
+  home: boolean;
+  team: boolean;
+  projects: boolean;
+  faq: boolean;
+}
+
 const Footer = () => {
   const [config, setConfig] = useState<FooterConfig>(defaultFooterConfig);
   const [loading, setLoading] = useState(true);
+  const [pageSettings, setPageSettings] = useState<PageSettings>({
+    home: true,
+    team: true,
+    projects: true,
+    faq: true,
+  });
 
   useEffect(() => {
     fetchConfig();
+    fetchPageSettings();
   }, []);
 
   const fetchConfig = async () => {
@@ -70,6 +84,17 @@ const Footer = () => {
       // Use default config on error
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchPageSettings = async () => {
+    try {
+      const response = await apiService.getConfig('page_settings');
+      if (response.data?.value) {
+        setPageSettings(response.data.value);
+      }
+    } catch (error) {
+      console.error('Error fetching page settings:', error);
     }
   };
 
@@ -116,14 +141,23 @@ const Footer = () => {
                   </h3>
                 )}
                 <ul className="space-y-3 font-sans text-lg">
-                  {sections.navigation.links.map((link) => (
-                    <li key={link.path}>
-                      <Link to={link.path} className="relative inline-block text-gray-300 hover:text-gold transition-colors group">
-                        {link.name}
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
-                      </Link>
-                    </li>
-                  ))}
+                  {sections.navigation.links
+                    .filter((link) => {
+                      // Filter based on page settings
+                      if (link.path === '/') return pageSettings.home;
+                      if (link.path === '/projects') return pageSettings.projects;
+                      if (link.path === '/management-team') return pageSettings.team;
+                      if (link.path === '/faq') return pageSettings.faq;
+                      return true; // Show other links by default
+                    })
+                    .map((link) => (
+                      <li key={link.path}>
+                        <Link to={link.path} className="relative inline-block text-gray-300 hover:text-gold transition-colors group">
+                          {link.name}
+                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
+                        </Link>
+                      </li>
+                    ))}
                 </ul>
               </>
             )}

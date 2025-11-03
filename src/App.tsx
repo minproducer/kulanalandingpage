@@ -7,6 +7,9 @@ import Home from './pages/Home';
 import ManagementTeam from './pages/ManagementTeam';
 import Projects from './pages/Projects';
 import FAQ from './pages/FAQ';
+import NotFound from './pages/NotFound';
+import ErrorPage from './pages/ErrorPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Admin imports
 import AdminLayout from './admin/layouts/AdminLayout';
@@ -14,6 +17,10 @@ import Login from './admin/pages/Login';
 import Dashboard from './admin/pages/Dashboard';
 import FooterSettings from './admin/pages/FooterSettings';
 import ProjectsManagement from './admin/pages/ProjectsManagement';
+import FAQSettings from './admin/pages/FAQSettings';
+import HomeSettings from './admin/pages/HomeSettings';
+import TeamSettings from './admin/pages/TeamSettings';
+import PageSettings from './admin/pages/PageSettings';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -46,6 +53,14 @@ function AppContent() {
           }
         />
         <Route
+          path="/admin/home"
+          element={
+            <AdminLayout>
+              <HomeSettings />
+            </AdminLayout>
+          }
+        />
+        <Route
           path="/admin/footer"
           element={
             <AdminLayout>
@@ -57,14 +72,7 @@ function AppContent() {
           path="/admin/faq"
           element={
             <AdminLayout>
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h1 className="font-serif text-3xl font-bold text-text-primary mb-4">
-                  FAQ Settings
-                </h1>
-                <p className="font-sans text-text-secondary">
-                  FAQ configuration page coming soon...
-                </p>
-              </div>
+              <FAQSettings />
             </AdminLayout>
           }
         />
@@ -73,6 +81,22 @@ function AppContent() {
           element={
             <AdminLayout>
               <ProjectsManagement />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/team"
+          element={
+            <AdminLayout>
+              <TeamSettings />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/page-settings"
+          element={
+            <AdminLayout>
+              <PageSettings />
             </AdminLayout>
           }
         />
@@ -86,10 +110,14 @@ function AppContent() {
       <Navbar />
       <main key={location.pathname} className="flex-grow page-transition">
         <Routes location={location}>
-          <Route path="/" element={<Home />} />
-          <Route path="/management-team" element={<ManagementTeam />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/faq" element={<FAQ />} />
+          <Route path="/" element={<ProtectedRoute pageKey="home"><Home /></ProtectedRoute>} />
+          <Route path="/management-team" element={<ProtectedRoute pageKey="team"><ManagementTeam /></ProtectedRoute>} />
+          <Route path="/projects" element={<ProtectedRoute pageKey="projects"><Projects /></ProtectedRoute>} />
+          <Route path="/faq" element={<ProtectedRoute pageKey="faq"><FAQ /></ProtectedRoute>} />
+          <Route path="/error/500" element={<ErrorPage code={500} title="Server Error" message="Something went wrong on our end. Please try again later." />} />
+          <Route path="/error/503" element={<ErrorPage code={503} title="Service Unavailable" message="The server is temporarily unable to handle your request. Please try again in a few moments." />} />
+          <Route path="/error/403" element={<ErrorPage code={403} title="Access Denied" message="You don't have permission to access this resource." />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
