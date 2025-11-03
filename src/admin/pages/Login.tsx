@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiService, setAuthToken, setUserInfo } from '../../services/apiService';
+import { apiService, setAuthToken, setUserInfo, isAuthenticated } from '../../services/apiService';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -8,6 +8,13 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Auto-redirect to dashboard if already logged in
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate('/admin', { replace: true });
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +33,7 @@ const Login = () => {
         });
         
         // Redirect to dashboard
-        navigate('/admin/dashboard');
+        navigate('/admin');
       } else {
         setError(response.message || 'Invalid username or password');
       }

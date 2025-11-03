@@ -45,7 +45,7 @@ function AppContent() {
       <Routes location={location}>
         <Route path="/admin/login" element={<Login />} />
         <Route
-          path="/admin/dashboard"
+          path="/admin"
           element={
             <AdminLayout>
               <Dashboard />
