@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiService } from '../../services/apiService';
 import ImageUploadField from '../components/ImageUploadField';
-import { useApp } from '../contexts/useApp';
-import { translations } from '../locales/translations';
+import { useTranslation } from 'react-i18next';
 
 interface Project {
   id: number;
@@ -22,8 +21,7 @@ interface Project {
 }
 
 const ProjectsManagement = () => {
-  const { language } = useApp();
-  const t = translations[language];
+  const { t } = useTranslation();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -288,8 +286,8 @@ const ProjectsManagement = () => {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t.projects.title}</h1>
-            <p className="text-gray-600 dark:text-gray-400">{t.common.add} / {t.common.edit} {t.projects.title}</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('projects.title')}</h1>
+            <p className="text-gray-600 dark:text-gray-400">{t('common.add')} / {t('common.edit')} {t('projects.title')}</p>
           </div>
           <button
             onClick={handleAddNew}
@@ -580,18 +578,18 @@ const ProjectsManagement = () => {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               )}
-              {saving ? t.common.saving : t.common.save}
+              {saving ? t('common.saving') : t('common.save')}
             </button>
             <button
               onClick={handleCancelEdit}
               disabled={saving}
               className="bg-gray-500 dark:bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors duration-200 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {t.common.cancel}
+              {t('common.cancel')}
             </button>
           </div>
           {!formData.name || !formData.location || !formData.image || !formData.description ? (
-            <p className="text-sm text-red-600 dark:text-red-400 mt-2">{t.common.required}</p>
+            <p className="text-sm text-red-600 dark:text-red-400 mt-2">{t('common.required')}</p>
           ) : null}
         </div>
       )}
@@ -599,7 +597,7 @@ const ProjectsManagement = () => {
       {/* Projects List */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
         <div className="p-6 bg-gray-50 dark:bg-gray-700 border-b dark:border-gray-600">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white">{t.projects.allProjects} ({projects.length})</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">{t('projects.allProjects')} ({projects.length})</h2>
         </div>
 
         {projects.length === 0 ? (
@@ -607,7 +605,7 @@ const ProjectsManagement = () => {
             <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
-            <p className="text-gray-500 dark:text-gray-400 text-lg">{t.projects.noProjects}</p>
+            <p className="text-gray-500 dark:text-gray-400 text-lg">{t('projects.noProjects')}</p>
           </div>
         ) : (
           <>

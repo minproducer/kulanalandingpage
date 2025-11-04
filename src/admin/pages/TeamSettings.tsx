@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { apiService } from '../../services/apiService';
 import Notification from '../components/Notification';
 import ImageUploadField from '../components/ImageUploadField';
-import { useApp } from '../contexts/useApp';
-import { translations } from '../locales/translations';
+import { useTranslation } from 'react-i18next';
 
 interface TeamMember {
   id: number;
@@ -24,8 +23,7 @@ interface TeamConfig {
 }
 
 const TeamSettings = () => {
-  const { language } = useApp();
-  const t = translations[language];
+  const { t } = useTranslation();
   const [config, setConfig] = useState<TeamConfig>({
     hero: {
       enabled: true,
@@ -254,7 +252,7 @@ const TeamSettings = () => {
       )}
 
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t.team.title}</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('team.title')}</h1>
         <button
           onClick={handleSave}
           disabled={saving}
@@ -354,14 +352,14 @@ const TeamSettings = () => {
         {(isAddingNew || editingMember) && (
           <div className="mb-6 p-6 bg-gray-50 dark:bg-gray-700 rounded-lg border-2 border-blue-200 dark:border-blue-600">
             <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
-              {isAddingNew ? t.team.addMember : t.team.editMember}
+              {isAddingNew ? t('team.addMember') : t('team.editMember')}
             </h3>
             
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    {t.team.name} *
+                    {t('team.name')} *
                   </label>
                   <input
                     type="text"
@@ -374,7 +372,7 @@ const TeamSettings = () => {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    {t.team.position} *
+                    {t('team.position')} *
                   </label>
                   <input
                     type="text"
@@ -446,18 +444,18 @@ const TeamSettings = () => {
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                   )}
-                  {saving ? t.common.saving : t.common.save}
+                  {saving ? t('common.saving') : t('common.save')}
                 </button>
                 <button
                   onClick={handleCancelEdit}
                   disabled={saving}
                   className="bg-gray-500 dark:bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors duration-200 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {t.common.cancel}
+                  {t('common.cancel')}
                 </button>
               </div>
               {!memberFormData.name || !memberFormData.title || !memberFormData.bio || !memberFormData.image ? (
-                <p className="text-sm text-red-600 dark:text-red-400 mt-2">{t.common.required}</p>
+                <p className="text-sm text-red-600 dark:text-red-400 mt-2">{t('common.required')}</p>
               ) : null}
             </div>
           </div>
@@ -470,7 +468,7 @@ const TeamSettings = () => {
               <svg className="w-16 h-16 text-gray-300 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
-              <p className="text-gray-500 dark:text-gray-400 font-medium">{t.team.noMembers}</p>
+              <p className="text-gray-500 dark:text-gray-400 font-medium">{t('team.noMembers')}</p>
             </div>
           ) : (
             config.members.map((member) => (

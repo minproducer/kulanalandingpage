@@ -1,9 +1,7 @@
-import { useApp } from '../contexts/useApp';
-import { translations } from '../locales/translations';
+import { useTranslation } from 'react-i18next';
 
 const Guide = () => {
-  const { language } = useApp();
-  const t = translations[language];
+  const { t, i18n } = useTranslation();
 
   const guideContent = {
     en: {
@@ -19,8 +17,8 @@ const Guide = () => {
             text: 'The sidebar on the left contains all main sections: Dashboard, Home Settings, Projects Management, Team Settings, Footer Settings, FAQ Settings, and this Guide. On mobile, tap the hamburger menu to access the sidebar.',
           },
           {
-            subtitle: 'Language & Theme',
-            text: 'Use the language toggle (🌐) to switch between English and Vietnamese. Use the theme toggle (☀️/🌙) to switch between light and dark mode. Your preferences are saved automatically.',
+            subtitle: 'i18n.language & Theme',
+            text: 'Use the i18n.language toggle (🌐) to switch between English and Vietnamese. Use the theme toggle (☀️/🌙) to switch between light and dark mode. Your preferences are saved automatically.',
           },
         ],
       },
@@ -222,7 +220,7 @@ const Guide = () => {
     },
   };
 
-  const content = guideContent[language];
+  const content = guideContent[i18n.language as 'en' | 'vi'] || guideContent.en;
 
   const sections = [
     { id: 'getting-started', data: content.gettingStarted, icon: '🚀' },
@@ -245,16 +243,16 @@ const Guide = () => {
       <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8">
         <div className="flex items-center gap-3 mb-2">
           <span className="text-4xl">📚</span>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t.guide.title}</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('guide.title')}</h1>
         </div>
-        <p className="text-gray-600 dark:text-gray-300">{t.guide.subtitle}</p>
+        <p className="text-gray-600 dark:text-gray-300">{t('guide.subtitle')}</p>
       </div>
 
       {/* Table of Contents */}
       <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <span>📋</span>
-          {t.guide.toc}
+          {t('guide.toc')}
         </h2>
         <div className="grid sm:grid-cols-2 gap-3">
           {sections.map((section) => (
@@ -286,7 +284,7 @@ const Guide = () => {
             {section.data.title}
           </h2>
           <div className="space-y-6">
-            {section.data.content.map((item, index) => (
+            {section.data.content.map((item: any, index: number) => (
               <div key={index} className="border-l-4 border-blue-500 dark:border-blue-400 pl-4">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   {item.subtitle}
@@ -306,10 +304,10 @@ const Guide = () => {
           <span className="text-2xl">ℹ️</span>
           <div>
             <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-1">
-              {language === 'en' ? 'Need Help?' : 'Cần Hỗ trợ?'}
+              {i18n.language === 'en' ? 'Need Help?' : 'Cần Hỗ trợ?'}
             </h3>
             <p className="text-blue-800 dark:text-blue-200 text-sm">
-              {language === 'en'
+              {i18n.language === 'en'
                 ? 'If you encounter any issues or have questions, please contact the technical support team.'
                 : 'Nếu bạn gặp bất kỳ vấn đề nào hoặc có câu hỏi, vui lòng liên hệ với đội ngũ hỗ trợ kỹ thuật.'}
             </p>

@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { apiService } from '../../services/apiService';
 import Notification from '../components/Notification';
 import ImageUploadField from '../components/ImageUploadField';
-import { useApp } from '../contexts/useApp';
-import { translations } from '../locales/translations';
+import { useTranslation } from 'react-i18next';
 
 interface ContentSection {
   id: string;
@@ -34,8 +33,7 @@ interface HomeConfig {
 }
 
 const HomeSettings = () => {
-  const { language } = useApp();
-  const t = translations[language];
+  const { t, i18n } = useTranslation();
   const [config, setConfig] = useState<HomeConfig>({
     navbar: {
       logoUrl: '',
@@ -179,7 +177,7 @@ const HomeSettings = () => {
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <p className="text-gray-600 dark:text-gray-400">{t.common.loading}</p>
+          <p className="text-gray-600 dark:text-gray-400">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -197,7 +195,7 @@ const HomeSettings = () => {
       )}
 
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t.home.title}</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('home.title')}</h1>
         <button
           onClick={handleSave}
           disabled={saving}
@@ -209,13 +207,13 @@ const HomeSettings = () => {
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           )}
-          {saving ? t.common.saving : (language === 'en' ? 'Save All Changes' : 'Lưu tất cả thay đổi')}
+          {saving ? t('common.saving') : t('common.saveAll')}
         </button>
       </div>
 
       {/* Navbar Settings */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t.home.navbarLogo}</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t('home.navbarLogo')}</h2>
         <div className="space-y-4">
           <ImageUploadField
             label="Navbar Logo"
@@ -260,60 +258,62 @@ const HomeSettings = () => {
       {/* Hero Section Settings */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-800">Hero Section</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">
+        {i18n.language === 'en' ? 'Hero Section' : 'Phần Hero'}
+          </h2>
           <label className="flex items-center cursor-pointer">
-            <div className="relative">
-              <input
-                type="checkbox"
-                checked={config.hero.enabled}
-                onChange={() => handleToggle('hero', 'enabled')}
-                className="sr-only"
-              />
-              <div className={`block w-14 h-8 rounded-full ${config.hero.enabled ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
-              <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${config.hero.enabled ? 'transform translate-x-6' : ''}`}></div>
-            </div>
-            <span className="ml-3 text-sm font-medium text-gray-700">
-              {config.hero.enabled ? 'Enabled' : 'Disabled'}
-            </span>
+        <div className="relative">
+          <input
+            type="checkbox"
+            checked={config.hero.enabled}
+            onChange={() => handleToggle('hero', 'enabled')}
+            className="sr-only"
+          />
+          <div className={`block w-14 h-8 rounded-full ${config.hero.enabled ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'}`}></div>
+          <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${config.hero.enabled ? 'transform translate-x-6' : ''}`}></div>
+        </div>
+        <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+          {config.hero.enabled ? (i18n.language === 'en' ? 'Enabled' : 'Bật') : (i18n.language === 'en' ? 'Disabled' : 'Tắt')}
+        </span>
           </label>
         </div>
 
         {config.hero.enabled && (
           <div className="space-y-4">
-            <ImageUploadField
-              label="Hero Background Image"
-              value={config.hero.backgroundImage}
-              onChange={(url) => handleInputChange('hero', 'backgroundImage', url)}
-              disabled={saving}
-              description="Fullscreen hero background. Recommended size: 1920x1080px."
+        <ImageUploadField
+          label={i18n.language === 'en' ? 'Hero Background Image' : 'Ảnh nền Hero'}
+          value={config.hero.backgroundImage}
+          onChange={(url) => handleInputChange('hero', 'backgroundImage', url)}
+          disabled={saving}
+          description={i18n.language === 'en' ? 'Fullscreen hero background. Recommended size: 1920x1080px.' : 'Ảnh nền toàn màn hình. Kích thước khuyến nghị: 1920x1080px.'}
+        />
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+            {i18n.language === 'en' ? 'Main Title' : 'Tiêu đề chính'}
+          </label>
+          <input
+            type="text"
+            value={config.hero.title}
+            onChange={(e) => handleInputChange('hero', 'title', e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+            placeholder={i18n.language === 'en' ? 'Trusted Development, Built to Last' : 'Phát triển đáng tin cậy, xây dựng bền vững'}
+          />
+        </div>
+
+        <div>
+          <label className="flex items-center cursor-pointer">
+            <input
+          type="checkbox"
+          checked={config.hero.showSeparator}
+          onChange={() => handleToggle('hero', 'showSeparator')}
+          className="w-5 h-5 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 dark:bg-gray-700"
             />
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Main Title
-              </label>
-              <input
-                type="text"
-                value={config.hero.title}
-                onChange={(e) => handleInputChange('hero', 'title', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Trusted Development, Built to Last"
-              />
-            </div>
-
-            <div>
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={config.hero.showSeparator}
-                  onChange={() => handleToggle('hero', 'showSeparator')}
-                  className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
-                />
-                <span className="ml-3 text-sm font-medium text-gray-700">
-                  Show gold separator bar below title
-                </span>
-              </label>
-            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+          {i18n.language === 'en' ? 'Show gold separator bar below title' : 'Hiển thị thanh phân cách vàng dưới tiêu đề'}
+            </span>
+          </label>
+        </div>
           </div>
         )}
       </div>
@@ -321,36 +321,38 @@ const HomeSettings = () => {
       {/* Introduction Section Settings */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-800">Introduction / About Section</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">
+        {i18n.language === 'en' ? 'Introduction / About Section' : 'Phần Giới thiệu'}
+          </h2>
           <label className="flex items-center cursor-pointer">
-            <div className="relative">
-              <input
-                type="checkbox"
-                checked={config.introduction.enabled}
-                onChange={() => handleToggle('introduction', 'enabled')}
-                className="sr-only"
-              />
-              <div className={`block w-14 h-8 rounded-full ${config.introduction.enabled ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
-              <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${config.introduction.enabled ? 'transform translate-x-6' : ''}`}></div>
-            </div>
-            <span className="ml-3 text-sm font-medium text-gray-700">
-              {config.introduction.enabled ? 'Enabled' : 'Disabled'}
-            </span>
+        <div className="relative">
+          <input
+            type="checkbox"
+            checked={config.introduction.enabled}
+            onChange={() => handleToggle('introduction', 'enabled')}
+            className="sr-only"
+          />
+          <div className={`block w-14 h-8 rounded-full ${config.introduction.enabled ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'}`}></div>
+          <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${config.introduction.enabled ? 'transform translate-x-6' : ''}`}></div>
+        </div>
+        <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+          {config.introduction.enabled ? (i18n.language === 'en' ? 'Enabled' : 'Bật') : (i18n.language === 'en' ? 'Disabled' : 'Tắt')}
+        </span>
           </label>
         </div>
 
         {config.introduction.enabled && (
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Introduction Text
-            </label>
-            <textarea
-              value={config.introduction.text}
-              onChange={(e) => handleInputChange('introduction', 'text', e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              rows={5}
-              placeholder="With decades of combined experience..."
-            />
+        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          {i18n.language === 'en' ? 'Introduction Text' : 'Văn bản giới thiệu'}
+        </label>
+        <textarea
+          value={config.introduction.text}
+          onChange={(e) => handleInputChange('introduction', 'text', e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          rows={5}
+          placeholder={i18n.language === 'en' ? 'With decades of combined experience...' : 'Với nhiều thập kỷ kinh nghiệm...'}
+        />
           </div>
         )}
       </div>
@@ -359,96 +361,97 @@ const HomeSettings = () => {
       {config.sections.map((section, index) => (
         <div key={section.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-800">Section: {section.title}</h2>
-            <label className="flex items-center cursor-pointer">
-              <div className="relative">
-                <input
-                  type="checkbox"
-                  checked={section.enabled}
-                  onChange={() => handleSectionToggle(index, 'enabled')}
-                  className="sr-only"
-                />
-                <div className={`block w-14 h-8 rounded-full ${section.enabled ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
-                <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${section.enabled ? 'transform translate-x-6' : ''}`}></div>
-              </div>
-              <span className="ml-3 text-sm font-medium text-gray-700">
-                {section.enabled ? 'Enabled' : 'Disabled'}
-              </span>
-            </label>
+        <h2 className="text-xl font-bold text-gray-800 dark:text-white">
+          {i18n.language === 'en' ? `Section: ${section.title}` : `Phần: ${section.title}`}
+        </h2>
+        <label className="flex items-center cursor-pointer">
+          <div className="relative">
+            <input
+          type="checkbox"
+          checked={section.enabled}
+          onChange={() => handleSectionToggle(index, 'enabled')}
+          className="sr-only"
+            />
+            <div className={`block w-14 h-8 rounded-full ${section.enabled ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'}`}></div>
+            <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${section.enabled ? 'transform translate-x-6' : ''}`}></div>
+          </div>
+          <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+            {section.enabled ? (i18n.language === 'en' ? 'Enabled' : 'Bật') : (i18n.language === 'en' ? 'Disabled' : 'Tắt')}
+          </span>
+        </label>
           </div>
 
           {section.enabled && (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Section Title
-                </label>
-                <input
-                  type="text"
-                  value={section.title}
-                  onChange={(e) => handleSectionChange(index, 'title', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="What We Deliver"
-                />
-              </div>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          {i18n.language === 'en' ? 'Section Title' : 'Tiêu đề phần'}
+            </label>
+            <input
+          type="text"
+          value={section.title}
+          onChange={(e) => handleSectionChange(index, 'title', e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          placeholder={i18n.language === 'en' ? 'What We Deliver' : 'Những gì chúng tôi cung cấp'}
+            />
+          </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Description
-                </label>
-                <textarea
-                  value={section.description}
-                  onChange={(e) => handleSectionChange(index, 'description', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  rows={4}
-                  placeholder="Section description..."
-                />
-              </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          {i18n.language === 'en' ? 'Description' : 'Mô tả'}
+            </label>
+            <textarea
+          value={section.description}
+          onChange={(e) => handleSectionChange(index, 'description', e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          rows={4}
+          placeholder={i18n.language === 'en' ? 'Section description...' : 'Mô tả phần...'}
+            />
+          </div>
 
-              <ImageUploadField
-                label="Section Image"
-                value={section.image}
-                onChange={(url) => handleSectionChange(index, 'image', url)}
-                disabled={saving}
-                description="Section content image. Recommended size: 800x600px."
-              />
+          <ImageUploadField
+            label={i18n.language === 'en' ? 'Section Image' : 'Hình ảnh phần'}
+            value={section.image}
+            onChange={(url) => handleSectionChange(index, 'image', url)}
+            disabled={saving}
+            description={i18n.language === 'en' ? 'Section content image. Recommended size: 800x600px.' : 'Hình ảnh nội dung phần. Kích thước khuyến nghị: 800x600px.'}
+          />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Image Position
-                  </label>
-                  <select
-                    value={section.imagePosition}
-                    onChange={(e) => handleSectionChange(index, 'imagePosition', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="left">Left</option>
-                    <option value="right">Right</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Background Color
-                  </label>
-                  <select
-                    value={section.backgroundColor}
-                    onChange={(e) => handleSectionChange(index, 'backgroundColor', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="white">White</option>
-                    <option value="ivory">Ivory</option>
-                  </select>
-                </div>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+            {i18n.language === 'en' ? 'Image Position' : 'Vị trí hình ảnh'}
+          </label>
+          <select
+            value={section.imagePosition}
+            onChange={(e) => handleSectionChange(index, 'imagePosition', e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          >
+            <option value="left">{i18n.language === 'en' ? 'Left' : 'Trái'}</option>
+            <option value="right">{i18n.language === 'en' ? 'Right' : 'Phải'}</option>
+          </select>
             </div>
+
+            <div>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+            {i18n.language === 'en' ? 'Background Color' : 'Màu nền'}
+          </label>
+          <select
+            value={section.backgroundColor}
+            onChange={(e) => handleSectionChange(index, 'backgroundColor', e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          >
+            <option value="white">{i18n.language === 'en' ? 'White' : 'Trắng'}</option>
+            <option value="ivory">{i18n.language === 'en' ? 'Ivory' : 'Ngà'}</option>
+          </select>
+            </div>
+          </div>
+        </div>
           )}
         </div>
-      ))}
-    </div>
-  );
-};
-
-export default HomeSettings;
-
+            ))}
+          </div>
+        );
+      };
+      
+      export default HomeSettings;
