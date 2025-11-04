@@ -291,7 +291,7 @@ const FAQSettings = () => {
       {/* Hero Section Settings */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-800">Hero Section</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">Hero Section</h2>
           <label className="flex items-center cursor-pointer">
             <div className="relative">
               <input
@@ -303,7 +303,7 @@ const FAQSettings = () => {
               <div className={`block w-14 h-8 rounded-full ${config.hero.enabled ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
               <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${config.hero.enabled ? 'transform translate-x-6' : ''}`}></div>
             </div>
-            <span className="ml-3 text-sm font-medium text-gray-700">
+            <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
               {config.hero.enabled ? 'Enabled' : 'Disabled'}
             </span>
           </label>
@@ -321,40 +321,40 @@ const FAQSettings = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Title
                 </label>
                 <input
                   type="text"
                   value={config.hero.title}
                   onChange={(e) => handleInputChange('hero', 'title', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="FAQ"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Highlighted Text
                 </label>
                 <input
                   type="text"
                   value={config.hero.titleHighlight}
                   onChange={(e) => handleInputChange('hero', 'titleHighlight', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="FAQ"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Subtitle
               </label>
               <textarea
                 value={config.hero.subtitle}
                 onChange={(e) => handleInputChange('hero', 'subtitle', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 rows={3}
                 placeholder="Everything you need to know..."
               />
@@ -366,7 +366,7 @@ const FAQSettings = () => {
       {/* Category Filter Settings */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-800">Category Filter</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">Category Filter</h2>
           <label className="flex items-center cursor-pointer">
             <div className="relative">
               <input
@@ -378,7 +378,7 @@ const FAQSettings = () => {
               <div className={`block w-14 h-8 rounded-full ${config.categoryFilter.enabled ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
               <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${config.categoryFilter.enabled ? 'transform translate-x-6' : ''}`}></div>
             </div>
-            <span className="ml-3 text-sm font-medium text-gray-700">
+            <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
               {config.categoryFilter.enabled ? 'Enabled' : 'Disabled'}
             </span>
           </label>
@@ -391,9 +391,9 @@ const FAQSettings = () => {
                 type="checkbox"
                 checked={config.categoryFilter.showAllOption}
                 onChange={() => handleToggle('categoryFilter', 'showAllOption')}
-                className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                className="w-5 h-5 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500"
               />
-              <span className="ml-3 text-sm font-medium text-gray-700">
+              <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Show "All" option in filter
               </span>
             </label>
@@ -404,7 +404,7 @@ const FAQSettings = () => {
       {/* FAQ Display Settings */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-800">FAQ Display</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">FAQ Display</h2>
           <label className="flex items-center cursor-pointer">
             <div className="relative">
               <input
@@ -416,7 +416,7 @@ const FAQSettings = () => {
               <div className={`block w-14 h-8 rounded-full ${config.faqs.enabled ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
               <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${config.faqs.enabled ? 'transform translate-x-6' : ''}`}></div>
             </div>
-            <span className="ml-3 text-sm font-medium text-gray-700">
+            <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
               {config.faqs.enabled ? 'Enabled' : 'Disabled'}
             </span>
           </label>
@@ -429,9 +429,9 @@ const FAQSettings = () => {
                 type="checkbox"
                 checked={config.faqs.showCategoryBadges}
                 onChange={() => handleToggle('faqs', 'showCategoryBadges')}
-                className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                className="w-5 h-5 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500"
               />
-              <span className="ml-3 text-sm font-medium text-gray-700">
+              <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Show category badges on FAQ items
               </span>
             </label>
@@ -442,7 +442,7 @@ const FAQSettings = () => {
       {/* FAQ Items Management */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-800">FAQ Items ({config.faqItems.length})</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">FAQ Items ({config.faqItems.length})</h2>
           <button
             onClick={handleAddNew}
             disabled={isAddingNew || editingFAQ !== null}
@@ -454,46 +454,46 @@ const FAQSettings = () => {
 
         {/* Add/Edit Form */}
         {(isAddingNew || editingFAQ) && (
-          <div className="mb-6 p-6 bg-gray-50 rounded-lg border-2 border-blue-200">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">
-              {isAddingNew ? 'Add New FAQ' : 'Edit FAQ'}
+          <div className="mb-6 p-6 bg-gray-50 dark:bg-gray-700 rounded-lg border-2 border-blue-200 dark:border-blue-600">
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
+              {isAddingNew ? t.faq.addQuestion : t.common.edit + ' FAQ'}
             </h3>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Question *
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  {t.faq.question} *
                 </label>
                 <input
                   type="text"
                   value={faqFormData.question}
                   onChange={(e) => handleFaqInputChange('question', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="What types of projects does Kulana Development handle?"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Category *
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  {t.common.category} *
                 </label>
                 <input
                   type="text"
                   value={faqFormData.category}
                   onChange={(e) => handleFaqInputChange('category', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="General, Process, Services, Partnership, Quality..."
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Answer *
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  {t.faq.answer} *
                 </label>
                 <textarea
                   value={faqFormData.answer}
                   onChange={(e) => handleFaqInputChange('answer', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   rows={6}
                   placeholder="Provide a detailed answer to the question..."
                 />
@@ -511,18 +511,18 @@ const FAQSettings = () => {
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                   )}
-                  {saving ? 'Saving...' : 'Save FAQ'}
+                  {saving ? t.common.saving : t.common.save}
                 </button>
                 <button
                   onClick={handleCancelEdit}
                   disabled={saving}
-                  className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-200 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-gray-500 dark:bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors duration-200 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Cancel
+                  {t.common.cancel}
                 </button>
               </div>
               {!faqFormData.question || !faqFormData.answer || !faqFormData.category ? (
-                <p className="text-sm text-red-600 mt-2">* Please fill in all required fields</p>
+                <p className="text-sm text-red-600 dark:text-red-400 mt-2">{t.common.required}</p>
               ) : null}
             </div>
           </div>
@@ -531,7 +531,7 @@ const FAQSettings = () => {
         {/* FAQ List */}
         <div className="space-y-3">
           {config.faqItems.length === 0 ? (
-            <div className="text-center py-12 bg-gray-50 rounded-lg">
+            <div className="text-center py-12 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -540,7 +540,7 @@ const FAQSettings = () => {
             </div>
           ) : (
             config.faqItems.map((faq) => (
-              <div key={faq.id} className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors duration-200 bg-white">
+              <div key={faq.id} className="p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:border-blue-300 transition-colors duration-200 bg-white">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
@@ -548,7 +548,7 @@ const FAQSettings = () => {
                         {faq.category}
                       </span>
                     </div>
-                    <h4 className="font-bold text-gray-800 mb-2">{faq.question}</h4>
+                    <h4 className="font-bold text-gray-800 dark:text-white mb-2">{faq.question}</h4>
                     <p className="text-sm text-gray-600 line-clamp-2">{faq.answer}</p>
                   </div>
                   <div className="flex gap-2">

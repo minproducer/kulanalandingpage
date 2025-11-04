@@ -307,48 +307,48 @@ const ProjectsManagement = () => {
       {/* Edit/Add Form */}
       {(editingProject || isAddingNew) && (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8 border-2 border-blue-500">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
             {isAddingNew ? 'Add New Project' : 'Edit Project'}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Project Name */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Project Name *
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter project name"
               />
             </div>
 
             {/* Location */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Location *
               </label>
               <input
                 type="text"
                 value={formData.location}
                 onChange={(e) => handleInputChange('location', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter location"
               />
             </div>
 
             {/* Status */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Status *
               </label>
               <select
                 value={formData.status}
                 onChange={(e) => handleInputChange('status', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="In Progress">In Progress</option>
                 <option value="Completed">Completed</option>
@@ -359,84 +359,84 @@ const ProjectsManagement = () => {
 
             {/* Size */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Size (Optional)
               </label>
               <input
                 type="text"
                 value={formData.size || ''}
                 onChange={(e) => handleInputChange('size', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="e.g., 50,000 sq ft"
               />
             </div>
 
             {/* Project Link */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Project Link (Optional)
               </label>
               <input
                 type="url"
                 value={formData.link || ''}
                 onChange={(e) => handleInputChange('link', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="https://example.com/project-details"
               />
             </div>
 
             {/* Description */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Description *
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 rows={3}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter project description"
               />
             </div>
 
             {/* Detail Description */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Detailed Description (Optional)
               </label>
               <textarea
                 value={formData.detailDescription || ''}
                 onChange={(e) => handleInputChange('detailDescription', e.target.value)}
                 rows={5}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter detailed project description (shown in modal)"
               />
             </div>
 
             {/* Completion Date */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Completion Date (Optional)
               </label>
               <input
                 type="text"
                 value={formData.completionDate || ''}
                 onChange={(e) => handleInputChange('completionDate', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="e.g., December 2024"
               />
             </div>
 
             {/* Client Name */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Client Name (Optional)
               </label>
               <input
                 type="text"
                 value={formData.clientName || ''}
                 onChange={(e) => handleInputChange('clientName', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter client name"
               />
             </div>
@@ -454,7 +454,7 @@ const ProjectsManagement = () => {
 
             {/* Image Gallery Upload */}
             <div className="md:col-span-2 border-t pt-6">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Image Gallery (Optional)
               </label>
               <p className="text-xs text-gray-500 mb-3">Upload additional images for the project detail modal</p>
@@ -467,7 +467,7 @@ const ProjectsManagement = () => {
                       <img
                         src={img}
                         alt={`Gallery ${index + 1}`}
-                        className="w-full h-24 object-cover rounded-lg border-2 border-gray-200"
+                        className="w-full h-24 object-cover rounded-lg border-2 border-gray-200 dark:border-gray-600"
                       />
                       <button
                         onClick={() => handleRemoveGalleryImage(index)}
@@ -506,7 +506,7 @@ const ProjectsManagement = () => {
             <div className="md:col-span-2 border-t pt-6">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                     Project Specifications (Optional)
                   </label>
                   <p className="text-xs text-gray-500 mt-1">Add technical details and features</p>
@@ -527,21 +527,21 @@ const ProjectsManagement = () => {
               {formData.specifications && formData.specifications.length > 0 ? (
                 <div className="space-y-3">
                   {formData.specifications.map((spec, index) => (
-                    <div key={index} className="flex gap-2 items-start p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex gap-2 items-start p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                       <div className="flex-1 grid grid-cols-2 gap-2">
                         <input
                           type="text"
                           value={spec.key}
                           onChange={(e) => handleUpdateSpecification(index, 'key', e.target.value)}
                           placeholder="Key (e.g., Total Floors)"
-                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
                         />
                         <input
                           type="text"
                           value={spec.value}
                           onChange={(e) => handleUpdateSpecification(index, 'value', e.target.value)}
                           placeholder="Value (e.g., 12 floors)"
-                          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
                         />
                       </div>
                       <button
@@ -557,7 +557,7 @@ const ProjectsManagement = () => {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-6 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                <div className="text-center py-6 bg-gray-50 dark:bg-gray-700 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
                   <svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
@@ -580,26 +580,26 @@ const ProjectsManagement = () => {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               )}
-              {saving ? 'Saving...' : 'Save Project'}
+              {saving ? t.common.saving : t.common.save}
             </button>
             <button
               onClick={handleCancelEdit}
               disabled={saving}
-              className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors duration-200 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-gray-500 dark:bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors duration-200 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Cancel
+              {t.common.cancel}
             </button>
           </div>
           {!formData.name || !formData.location || !formData.image || !formData.description ? (
-            <p className="text-sm text-red-600 mt-2">* Please fill in all required fields</p>
+            <p className="text-sm text-red-600 dark:text-red-400 mt-2">{t.common.required}</p>
           ) : null}
         </div>
       )}
 
       {/* Projects List */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-        <div className="p-6 bg-gray-50 border-b">
-          <h2 className="text-xl font-bold text-gray-800">All Projects ({projects.length})</h2>
+        <div className="p-6 bg-gray-50 dark:bg-gray-700 border-b dark:border-gray-600">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">{t.projects.allProjects} ({projects.length})</h2>
         </div>
 
         {projects.length === 0 ? (
@@ -607,14 +607,14 @@ const ProjectsManagement = () => {
             <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
-            <p className="text-gray-500 text-lg">No projects yet. Click "Add New Project" to get started.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-lg">{t.projects.noProjects}</p>
           </div>
         ) : (
           <>
             {/* Mobile Card View */}
             <div className="lg:hidden divide-y divide-gray-200">
               {projects.map((project) => (
-                <div key={project.id} className="p-4 hover:bg-gray-50 transition-colors">
+                <div key={project.id} className="p-4 hover:bg-gray-50 dark:bg-gray-700 transition-colors">
                   <div className="flex gap-3">
                     <img
                       src={project.image}
@@ -630,15 +630,15 @@ const ProjectsManagement = () => {
                           project.status === 'Completed' ? 'bg-green-100 text-green-800' :
                           project.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
                           project.status === 'Coming Soon' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-gray-100 text-gray-800'
+                          'bg-gray-100 text-gray-800 dark:text-white'
                         }`}>
                           {project.status}
                         </span>
-                        <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-full whitespace-nowrap">
+                        <span className="px-2.5 py-1 bg-gray-100 text-gray-700 dark:text-gray-300 rounded-full whitespace-nowrap">
                           📍 {project.location}
                         </span>
                         {project.size && (
-                          <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-full whitespace-nowrap">
+                          <span className="px-2.5 py-1 bg-gray-100 text-gray-700 dark:text-gray-300 rounded-full whitespace-nowrap">
                             📐 {project.size}
                           </span>
                         )}
@@ -670,17 +670,17 @@ const ProjectsManagement = () => {
               <table className="w-full">
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Image</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Location</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Size</th>
-                    <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Image</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Location</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Size</th>
+                    <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
                   {projects.map((project) => (
-                    <tr key={project.id} className="hover:bg-gray-50 transition-colors">
+                    <tr key={project.id} className="hover:bg-gray-50 dark:bg-gray-700 transition-colors">
                       <td className="px-6 py-4">
                         <img
                           src={project.image}
@@ -692,18 +692,18 @@ const ProjectsManagement = () => {
                         <div className="font-semibold text-gray-900">{project.name}</div>
                         <div className="text-sm text-gray-500 line-clamp-2">{project.description}</div>
                       </td>
-                      <td className="px-6 py-4 text-gray-700">{project.location}</td>
+                      <td className="px-6 py-4 text-gray-700 dark:text-gray-300">{project.location}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${
                           project.status === 'Completed' ? 'bg-green-100 text-green-800' :
                           project.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
                           project.status === 'Coming Soon' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-gray-100 text-gray-800'
+                          'bg-gray-100 text-gray-800 dark:text-white'
                         }`}>
                           {project.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-gray-700">{project.size || '-'}</td>
+                      <td className="px-6 py-4 text-gray-700 dark:text-gray-300">{project.size || '-'}</td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button

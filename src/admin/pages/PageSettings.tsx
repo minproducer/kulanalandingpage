@@ -111,7 +111,7 @@ const PageSettings = () => {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 max-w-2xl">
         <div className="space-y-6">
           {/* Home Page Toggle */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="flex-1">
               <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">Home Page</h3>
               <p className="text-sm text-gray-700 dark:text-gray-300">
@@ -133,7 +133,7 @@ const PageSettings = () => {
           </div>
 
           {/* Team Page Toggle */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="flex-1">
               <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">Management Team Page</h3>
               <p className="text-sm text-gray-700 dark:text-gray-300">
@@ -155,7 +155,7 @@ const PageSettings = () => {
           </div>
 
           {/* Projects Page Toggle */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="flex-1">
               <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">Projects Page</h3>
               <p className="text-sm text-gray-700 dark:text-gray-300">
@@ -177,7 +177,7 @@ const PageSettings = () => {
           </div>
 
           {/* FAQ Page Toggle */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="flex-1">
               <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">FAQ Page</h3>
               <p className="text-sm text-gray-700 dark:text-gray-300">

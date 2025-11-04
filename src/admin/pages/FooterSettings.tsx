@@ -240,12 +240,12 @@ const FooterSettings = () => {
                 checked={config.sections.companyInfo.enabled}
                 onChange={() => handleToggle('companyInfo')}
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
           
           {config.sections.companyInfo.enabled && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-4">
+            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 space-y-4">
               {/* Logo Upload */}
               <div>
                 <label className="block mb-2">
@@ -277,7 +277,7 @@ const FooterSettings = () => {
                 <textarea
                   value={config.sections.companyInfo.description || ''}
                   onChange={(e) => handleTextChange('companyInfo', 'description', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition resize-none"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition resize-none"
                   rows={3}
                   placeholder="Enter company description..."
                 />
@@ -307,12 +307,12 @@ const FooterSettings = () => {
                 checked={config.sections.navigation.enabled}
                 onChange={() => handleToggle('navigation')}
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
           
           {config.sections.navigation.enabled && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
               <p className="font-accent text-sm font-semibold text-gray-900 dark:text-white mb-2">
                 Note: Navigation links are managed in the code. You can only toggle visibility here.
               </p>
@@ -344,19 +344,19 @@ const FooterSettings = () => {
                 checked={config.sections.contact.enabled}
                 onChange={() => handleToggle('contact')}
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
           
           {config.sections.contact.enabled && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
+            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 space-y-3">
               <label className="block">
                 <span className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Title</span>
                 <input
                   type="text"
                   value={config.sections.contact.title || ''}
                   onChange={(e) => handleTextChange('contact', 'title', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
                   placeholder="Contact"
                 />
               </label>
@@ -366,7 +366,7 @@ const FooterSettings = () => {
                   type="email"
                   value={config.sections.contact.email || ''}
                   onChange={(e) => handleTextChange('contact', 'email', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
                   placeholder="info@example.com"
                 />
               </label>
@@ -376,7 +376,7 @@ const FooterSettings = () => {
                   type="tel"
                   value={config.sections.contact.phone || ''}
                   onChange={(e) => handleTextChange('contact', 'phone', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
                   placeholder="(555) 123-4567"
                 />
               </label>
@@ -386,7 +386,7 @@ const FooterSettings = () => {
                   type="text"
                   value={config.sections.contact.location || ''}
                   onChange={(e) => handleTextChange('contact', 'location', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
                   placeholder="Texas & Southeast"
                 />
               </label>
@@ -415,19 +415,19 @@ const FooterSettings = () => {
                 checked={config.sections.social.enabled}
                 onChange={() => handleToggle('social')}
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
           
           {config.sections.social.enabled && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-4">
+            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 space-y-4">
               <label className="block">
                 <span className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Title</span>
                 <input
                   type="text"
                   value={config.sections.social.title || ''}
                   onChange={(e) => handleTextChange('social', 'title', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
                   placeholder="Follow Us"
                 />
               </label>
@@ -436,7 +436,7 @@ const FooterSettings = () => {
                 <p className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Social Media Platforms</p>
                 
                 {/* Email */}
-                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200 dark:border-gray-600">
                   <input
                     type="checkbox"
                     checked={config.sections.social.platforms?.email?.enabled || false}
@@ -447,7 +447,7 @@ const FooterSettings = () => {
                       newConfig.sections.social.platforms.email.enabled = e.target.checked;
                       setConfig(newConfig);
                     }}
-                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 dark:border-gray-600 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
                     <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">📧 Email</label>
@@ -461,7 +461,7 @@ const FooterSettings = () => {
                         newConfig.sections.social.platforms.email.value = e.target.value;
                         setConfig(newConfig);
                       }}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
                       placeholder="info@example.com"
                       disabled={!config.sections.social.platforms?.email?.enabled}
                     />
@@ -469,7 +469,7 @@ const FooterSettings = () => {
                 </div>
 
                 {/* LinkedIn */}
-                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200 dark:border-gray-600">
                   <input
                     type="checkbox"
                     checked={config.sections.social.platforms?.linkedin?.enabled || false}
@@ -480,7 +480,7 @@ const FooterSettings = () => {
                       newConfig.sections.social.platforms.linkedin.enabled = e.target.checked;
                       setConfig(newConfig);
                     }}
-                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 dark:border-gray-600 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
                     <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">💼 LinkedIn</label>
@@ -496,7 +496,7 @@ const FooterSettings = () => {
                           newConfig.sections.social.platforms.linkedin.username = e.target.value;
                           setConfig(newConfig);
                         }}
-                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                        className="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
                         placeholder="yourcompany"
                         disabled={!config.sections.social.platforms?.linkedin?.enabled}
                       />
@@ -505,7 +505,7 @@ const FooterSettings = () => {
                 </div>
 
                 {/* Facebook */}
-                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200 dark:border-gray-600">
                   <input
                     type="checkbox"
                     checked={config.sections.social.platforms?.facebook?.enabled || false}
@@ -516,7 +516,7 @@ const FooterSettings = () => {
                       newConfig.sections.social.platforms.facebook.enabled = e.target.checked;
                       setConfig(newConfig);
                     }}
-                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 dark:border-gray-600 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
                     <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">📘 Facebook</label>
@@ -532,7 +532,7 @@ const FooterSettings = () => {
                           newConfig.sections.social.platforms.facebook.username = e.target.value;
                           setConfig(newConfig);
                         }}
-                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                        className="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
                         placeholder="yourpage"
                         disabled={!config.sections.social.platforms?.facebook?.enabled}
                       />
@@ -541,7 +541,7 @@ const FooterSettings = () => {
                 </div>
 
                 {/* Twitter/X */}
-                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200 dark:border-gray-600">
                   <input
                     type="checkbox"
                     checked={config.sections.social.platforms?.twitter?.enabled || false}
@@ -552,7 +552,7 @@ const FooterSettings = () => {
                       newConfig.sections.social.platforms.twitter.enabled = e.target.checked;
                       setConfig(newConfig);
                     }}
-                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 dark:border-gray-600 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
                     <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">🐦 Twitter/X</label>
@@ -568,7 +568,7 @@ const FooterSettings = () => {
                           newConfig.sections.social.platforms.twitter.username = e.target.value;
                           setConfig(newConfig);
                         }}
-                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                        className="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
                         placeholder="yourhandle"
                         disabled={!config.sections.social.platforms?.twitter?.enabled}
                       />
@@ -577,7 +577,7 @@ const FooterSettings = () => {
                 </div>
 
                 {/* Instagram */}
-                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200 dark:border-gray-600">
                   <input
                     type="checkbox"
                     checked={config.sections.social.platforms?.instagram?.enabled || false}
@@ -588,7 +588,7 @@ const FooterSettings = () => {
                       newConfig.sections.social.platforms.instagram.enabled = e.target.checked;
                       setConfig(newConfig);
                     }}
-                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 dark:border-gray-600 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
                     <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">📷 Instagram</label>
@@ -604,7 +604,7 @@ const FooterSettings = () => {
                           newConfig.sections.social.platforms.instagram.username = e.target.value;
                           setConfig(newConfig);
                         }}
-                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                        className="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
                         placeholder="youraccount"
                         disabled={!config.sections.social.platforms?.instagram?.enabled}
                       />
@@ -613,7 +613,7 @@ const FooterSettings = () => {
                 </div>
 
                 {/* YouTube */}
-                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200 dark:border-gray-600">
                   <input
                     type="checkbox"
                     checked={config.sections.social.platforms?.youtube?.enabled || false}
@@ -624,7 +624,7 @@ const FooterSettings = () => {
                       newConfig.sections.social.platforms.youtube.enabled = e.target.checked;
                       setConfig(newConfig);
                     }}
-                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
+                    className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 dark:border-gray-600 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
                     <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">📺 YouTube</label>
@@ -640,7 +640,7 @@ const FooterSettings = () => {
                           newConfig.sections.social.platforms.youtube.username = e.target.value;
                           setConfig(newConfig);
                         }}
-                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
+                        className="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none"
                         placeholder="yourchannel"
                         disabled={!config.sections.social.platforms?.youtube?.enabled}
                       />
@@ -673,19 +673,19 @@ const FooterSettings = () => {
                 checked={config.copyright.enabled}
                 onChange={() => handleToggle('copyright')}
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-light rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
             </label>
           </div>
           
           {config.copyright.enabled && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
+            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 space-y-3">
               <label className="block">
                 <span className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Year</span>
                 <input
                   type="number"
                   value={config.copyright.year || new Date().getFullYear()}
                   onChange={(e) => handleTextChange('copyright', 'year', parseInt(e.target.value))}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
                   placeholder="2025"
                   min="2000"
                   max="2099"
@@ -697,7 +697,7 @@ const FooterSettings = () => {
                   type="text"
                   value={config.copyright.text || ''}
                   onChange={(e) => handleTextChange('copyright', 'text', e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
                   placeholder="Kulana Development"
                 />
               </label>

@@ -31,6 +31,7 @@ export const translations = {
       edit: 'Edit',
       delete: 'Delete',
       add: 'Add',
+      addNew: 'Add New',
       upload: 'Upload',
       url: 'URL',
       loading: 'Loading...',
@@ -43,6 +44,10 @@ export const translations = {
       search: 'Search',
       filter: 'Filter',
       actions: 'Actions',
+      name: 'Name',
+      title: 'Title',
+      category: 'Category',
+      required: '* Please fill in all required fields',
     },
     // Projects
     projects: {
@@ -177,6 +182,7 @@ export const translations = {
       edit: 'Sửa',
       delete: 'Xóa',
       add: 'Thêm',
+      addNew: 'Thêm mới',
       upload: 'Tải lên',
       url: 'Đường dẫn',
       loading: 'Đang tải...',
@@ -189,6 +195,10 @@ export const translations = {
       search: 'Tìm kiếm',
       filter: 'Lọc',
       actions: 'Thao tác',
+      name: 'Họ tên',
+      title: 'Tiêu đề',
+      category: 'Danh mục',
+      required: '* Vui lòng điền đầy đủ các trường bắt buộc',
     },
     // Projects
     projects: {
