@@ -12,6 +12,7 @@ import ErrorPage from './pages/ErrorPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Admin imports
+import { AppProvider } from './admin/contexts/AppContext';
 import AdminLayout from './admin/layouts/AdminLayout';
 import Login from './admin/pages/Login';
 import Dashboard from './admin/pages/Dashboard';
@@ -21,6 +22,7 @@ import FAQSettings from './admin/pages/FAQSettings';
 import HomeSettings from './admin/pages/HomeSettings';
 import TeamSettings from './admin/pages/TeamSettings';
 import PageSettings from './admin/pages/PageSettings';
+import Guide from './admin/pages/Guide';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -42,65 +44,75 @@ function AppContent() {
   // Admin routes - no navbar/footer
   if (isAdminRoute) {
     return (
-      <Routes location={location}>
-        <Route path="/admin/login" element={<Login />} />
-        <Route
-          path="/admin"
-          element={
-            <AdminLayout>
-              <Dashboard />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/home"
-          element={
-            <AdminLayout>
-              <HomeSettings />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/footer"
-          element={
-            <AdminLayout>
-              <FooterSettings />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/faq"
-          element={
-            <AdminLayout>
-              <FAQSettings />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/projects"
-          element={
-            <AdminLayout>
-              <ProjectsManagement />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/team"
-          element={
-            <AdminLayout>
-              <TeamSettings />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/page-settings"
-          element={
-            <AdminLayout>
-              <PageSettings />
-            </AdminLayout>
-          }
-        />
-      </Routes>
+      <AppProvider>
+        <Routes location={location}>
+          <Route path="/admin/login" element={<Login />} />
+          <Route
+            path="/admin"
+            element={
+              <AdminLayout>
+                <Dashboard />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/home"
+            element={
+              <AdminLayout>
+                <HomeSettings />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/footer"
+            element={
+              <AdminLayout>
+                <FooterSettings />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/faq"
+            element={
+              <AdminLayout>
+                <FAQSettings />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/projects"
+            element={
+              <AdminLayout>
+                <ProjectsManagement />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/team"
+            element={
+              <AdminLayout>
+                <TeamSettings />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/guide"
+            element={
+              <AdminLayout>
+                <Guide />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/page-settings"
+            element={
+              <AdminLayout>
+                <PageSettings />
+              </AdminLayout>
+            }
+          />
+        </Routes>
+      </AppProvider>
     );
   }
 
