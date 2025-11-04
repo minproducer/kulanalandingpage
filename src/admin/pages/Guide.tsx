@@ -1,4 +1,4 @@
-import { useApp } from '../contexts/AppContext';
+import { useApp } from '../contexts/useApp';
 import { translations } from '../locales/translations';
 
 const Guide = () => {
@@ -321,3 +321,4 @@ const Guide = () => {
 };
 
 export default Guide;
+

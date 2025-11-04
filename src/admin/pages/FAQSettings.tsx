@@ -1,4 +1,4 @@
-import { useApp } from '../contexts/AppContext';
+import { useApp } from '../contexts/useApp';
 import { translations } from '../locales/translations';
 import { useState, useEffect } from 'react';
 import { apiService } from '../../services/apiService';
@@ -584,4 +584,5 @@ const FAQSettings = () => {
 };
 
 export default FAQSettings;
+
 

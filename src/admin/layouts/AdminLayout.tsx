@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { clearAuthToken } from '../../services/apiService';
-import { useApp } from '../contexts/AppContext';
+import { useApp } from '../contexts/useApp';
 import { translations } from '../locales/translations';
 
 interface AdminLayoutProps {
@@ -204,3 +204,4 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
 };
 
 export default AdminLayout;
+

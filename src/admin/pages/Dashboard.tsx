@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isAuthenticated, getUserInfo } from '../../services/apiService';
-import { useApp } from '../contexts/AppContext';
+import { useApp } from '../contexts/useApp';
 import { translations } from '../locales/translations';
 
 const Dashboard = () => {
@@ -125,3 +125,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiService, isAuthenticated } from '../../services/apiService';
 import ImageUploadField from '../components/ImageUploadField';
-import { useApp } from '../contexts/AppContext';
+import { useApp } from '../contexts/useApp';
 import { translations } from '../locales/translations';
 
 interface FooterConfig {
@@ -748,4 +748,5 @@ const FooterSettings = () => {
 };
 
 export default FooterSettings;
+
 

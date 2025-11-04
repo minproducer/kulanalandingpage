@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiService } from '../../services/apiService';
 import ImageUploadField from '../components/ImageUploadField';
-import { useApp } from '../contexts/AppContext';
+import { useApp } from '../contexts/useApp';
 import { translations } from '../locales/translations';
 
 interface Project {
@@ -747,3 +747,4 @@ const ProjectsManagement = () => {
 };
 
 export default ProjectsManagement;
+

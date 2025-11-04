@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiService, setAuthToken, setUserInfo, isAuthenticated } from '../../services/apiService';
-import { useApp } from '../contexts/AppContext';
+import { useApp } from '../contexts/useApp';
 import { translations } from '../locales/translations';
 
 const Login = () => {
@@ -126,3 +126,4 @@ const Login = () => {
 };
 
 export default Login;
+

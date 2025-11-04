@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { apiService } from '../../services/apiService';
 import Notification from '../components/Notification';
 import ImageUploadField from '../components/ImageUploadField';
-import { useApp } from '../contexts/AppContext';
+import { useApp } from '../contexts/useApp';
 import { translations } from '../locales/translations';
 
 interface ContentSection {
@@ -451,3 +451,4 @@ const HomeSettings = () => {
 };
 
 export default HomeSettings;
+
