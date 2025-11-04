@@ -14,6 +14,10 @@ interface ContentSection {
 }
 
 interface HomeConfig {
+  navbar?: {
+    logoUrl: string;
+    logoText: string;
+  };
   hero: {
     enabled: boolean;
     backgroundImage: string;
@@ -29,6 +33,10 @@ interface HomeConfig {
 
 const HomeSettings = () => {
   const [config, setConfig] = useState<HomeConfig>({
+    navbar: {
+      logoUrl: '',
+      logoText: 'KULANA',
+    },
     hero: {
       enabled: true,
       backgroundImage: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1920&q=80',
@@ -199,6 +207,50 @@ const HomeSettings = () => {
           )}
           {saving ? 'Saving...' : 'Save All Changes'}
         </button>
+      </div>
+
+      {/* Navbar Settings */}
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <h2 className="text-xl font-bold text-gray-800 mb-6">Navbar Settings</h2>
+        <div className="space-y-4">
+          <ImageUploadField
+            label="Navbar Logo"
+            value={config.navbar?.logoUrl || ''}
+            onChange={(url) => setConfig(prev => ({
+              ...prev,
+              navbar: {
+                ...prev.navbar,
+                logoUrl: url,
+                logoText: prev.navbar?.logoText || 'KULANA'
+              }
+            }))}
+            disabled={saving}
+            description="Logo for navigation bar. Recommended size: 200x60px. Leave empty to use text logo."
+          />
+          
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Logo Text (fallback if no image)
+            </label>
+            <input
+              type="text"
+              value={config.navbar?.logoText || 'KULANA'}
+              onChange={(e) => setConfig(prev => ({
+                ...prev,
+                navbar: {
+                  ...prev.navbar,
+                  logoUrl: prev.navbar?.logoUrl || '',
+                  logoText: e.target.value
+                }
+              }))}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="KULANA"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Text displayed when no logo image is uploaded
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Hero Section Settings */}

@@ -9,6 +9,11 @@ interface PageSettings {
   faq: boolean;
 }
 
+interface NavbarConfig {
+  logoUrl?: string;
+  logoText?: string;
+}
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -17,6 +22,10 @@ const Navbar = () => {
     team: true,
     projects: true,
     faq: true,
+  });
+  const [navbarConfig, setNavbarConfig] = useState<NavbarConfig>({
+    logoUrl: '',
+    logoText: 'KULANA',
   });
   const location = useLocation();
 
@@ -43,6 +52,20 @@ const Navbar = () => {
     fetchPageSettings();
   }, []);
 
+  useEffect(() => {
+    const fetchNavbarConfig = async () => {
+      try {
+        const response = await apiService.getConfig('home');
+        if (response.data?.value?.navbar) {
+          setNavbarConfig(response.data.value.navbar);
+        }
+      } catch (error) {
+        console.error('Error fetching navbar config:', error);
+      }
+    };
+    fetchNavbarConfig();
+  }, []);
+
   const allNavItems = [
     { name: 'Home', path: '/', key: 'home' as keyof PageSettings },
     { name: 'Projects', path: '/projects', key: 'projects' as keyof PageSettings },
@@ -63,11 +86,25 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center group">
-            <img 
-              src="/kulana-logo.png" 
-              alt="Kulana Development" 
-              className="h-14 md:h-16 lg:h-18 w-auto"
-            />
+            {navbarConfig.logoUrl ? (
+              <img 
+                src={navbarConfig.logoUrl} 
+                alt={navbarConfig.logoText || 'Kulana Development'} 
+                className="h-14 md:h-16 lg:h-18 w-auto"
+                onError={(e) => {
+                  // Fallback to text if image fails to load
+                  e.currentTarget.style.display = 'none';
+                  const textSpan = e.currentTarget.nextElementSibling as HTMLElement;
+                  if (textSpan) textSpan.style.display = 'block';
+                }}
+              />
+            ) : null}
+            <span 
+              className="text-2xl font-bold text-white tracking-wider"
+              style={{ display: navbarConfig.logoUrl ? 'none' : 'block' }}
+            >
+              {navbarConfig.logoText || 'KULANA'}
+            </span>
           </Link>
 
           {/* Desktop Menu */}
