@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { apiService } from '../../services/apiService';
 import Notification from '../components/Notification';
 import ImageUploadField from '../components/ImageUploadField';
+import { useApp } from '../contexts/AppContext';
+import { translations } from '../locales/translations';
 
 interface ContentSection {
   id: string;
@@ -32,6 +34,8 @@ interface HomeConfig {
 }
 
 const HomeSettings = () => {
+  const { language } = useApp();
+  const t = translations[language];
   const [config, setConfig] = useState<HomeConfig>({
     navbar: {
       logoUrl: '',
@@ -175,7 +179,7 @@ const HomeSettings = () => {
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <p className="text-gray-600">Loading home settings...</p>
+          <p className="text-gray-600 dark:text-gray-400">{t.common.loading}</p>
         </div>
       </div>
     );
@@ -193,11 +197,11 @@ const HomeSettings = () => {
       )}
 
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-800">Home Page Settings</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t.home.title}</h1>
         <button
           onClick={handleSave}
           disabled={saving}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2"
+          className="bg-blue-600 dark:bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {saving && (
             <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -205,13 +209,13 @@ const HomeSettings = () => {
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           )}
-          {saving ? 'Saving...' : 'Save All Changes'}
+          {saving ? t.common.saving : (language === 'en' ? 'Save All Changes' : 'Lưu tất cả thay đổi')}
         </button>
       </div>
 
       {/* Navbar Settings */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        <h2 className="text-xl font-bold text-gray-800 mb-6">Navbar Settings</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t.home.navbarLogo}</h2>
         <div className="space-y-4">
           <ImageUploadField
             label="Navbar Logo"

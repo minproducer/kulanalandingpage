@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiService, isAuthenticated } from '../../services/apiService';
 import ImageUploadField from '../components/ImageUploadField';
+import { useApp } from '../contexts/AppContext';
+import { translations } from '../locales/translations';
 
 interface FooterConfig {
   sections: {
@@ -43,6 +45,8 @@ interface FooterConfig {
 }
 
 const FooterSettings = () => {
+  const { language } = useApp();
+  const t = translations[language];
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -206,10 +210,10 @@ const FooterSettings = () => {
 
       <div className="mb-8">
         <h1 className="font-serif text-4xl font-bold text-gray-900 dark:text-white mb-2">
-          Footer Settings
+          {t.footer.title}
         </h1>
         <p className="font-sans text-gray-700 dark:text-gray-300">
-          Manage footer sections visibility and content
+          {language === 'en' ? 'Manage footer sections visibility and content' : 'Quản lý các phần footer'}
         </p>
       </div>
 
@@ -744,3 +748,4 @@ const FooterSettings = () => {
 };
 
 export default FooterSettings;
+

@@ -1,3 +1,5 @@
+import { useApp } from '../contexts/AppContext';
+import { translations } from '../locales/translations';
 import { useState, useEffect } from 'react';
 import { apiService } from '../../services/apiService';
 import Notification from '../components/Notification';
@@ -30,6 +32,8 @@ interface FAQConfig {
 }
 
 const FAQSettings = () => {
+  const { language } = useApp();
+  const t = translations[language];
   const [config, setConfig] = useState<FAQConfig>({
     hero: {
       enabled: true,
@@ -268,11 +272,11 @@ const FAQSettings = () => {
       )}
 
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-800">FAQ Settings</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t.faq.title}</h1>
         <button
           onClick={handleSave}
           disabled={saving}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2"
+          className="bg-blue-600 dark:bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {saving && (
             <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -580,3 +584,4 @@ const FAQSettings = () => {
 };
 
 export default FAQSettings;
+
