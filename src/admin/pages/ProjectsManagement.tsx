@@ -622,7 +622,7 @@ const ProjectsManagement = () => {
                       <p className="text-sm text-gray-500 line-clamp-2 mb-2">{project.description}</p>
                       
                       <div className="flex flex-wrap gap-2 text-xs mb-3">
-                        <span className={`px-2.5 py-1 rounded-full font-semibold ${
+                        <span className={`px-2.5 py-1 rounded-full font-semibold whitespace-nowrap ${
                           project.status === 'Completed' ? 'bg-green-100 text-green-800' :
                           project.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
                           project.status === 'Coming Soon' ? 'bg-yellow-100 text-yellow-800' :
@@ -630,11 +630,11 @@ const ProjectsManagement = () => {
                         }`}>
                           {project.status}
                         </span>
-                        <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-full">
+                        <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-full whitespace-nowrap">
                           📍 {project.location}
                         </span>
                         {project.size && (
-                          <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-full">
+                          <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-full whitespace-nowrap">
                             📐 {project.size}
                           </span>
                         )}
