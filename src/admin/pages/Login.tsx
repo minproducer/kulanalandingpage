@@ -54,10 +54,10 @@ const Login = () => {
             alt="Kulana Development" 
             className="h-12 sm:h-16 mx-auto mb-3 sm:mb-4"
           />
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary mb-2">
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Admin Panel
           </h1>
-          <p className="font-sans text-sm sm:text-base text-text-secondary">
+          <p className="font-sans text-sm sm:text-base text-gray-700 dark:text-gray-300">
             Sign in to manage your website
           </p>
         </div>
@@ -70,7 +70,7 @@ const Login = () => {
           )}
 
           <div>
-            <label htmlFor="username" className="block font-accent text-sm font-semibold text-text-primary mb-2">
+            <label htmlFor="username" className="block font-accent text-sm font-semibold text-gray-900 dark:text-white mb-2">
               Username
             </label>
             <input
@@ -85,7 +85,7 @@ const Login = () => {
           </div>
 
           <div>
-            <label htmlFor="password" className="block font-accent text-sm font-semibold text-text-primary mb-2">
+            <label htmlFor="password" className="block font-accent text-sm font-semibold text-gray-900 dark:text-white mb-2">
               Password
             </label>
             <input

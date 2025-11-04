@@ -210,7 +210,7 @@ const HomeSettings = () => {
       </div>
 
       {/* Navbar Settings */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <h2 className="text-xl font-bold text-gray-800 mb-6">Navbar Settings</h2>
         <div className="space-y-4">
           <ImageUploadField
@@ -254,7 +254,7 @@ const HomeSettings = () => {
       </div>
 
       {/* Hero Section Settings */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-800">Hero Section</h2>
           <label className="flex items-center cursor-pointer">
@@ -315,7 +315,7 @@ const HomeSettings = () => {
       </div>
 
       {/* Introduction Section Settings */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-800">Introduction / About Section</h2>
           <label className="flex items-center cursor-pointer">
@@ -353,7 +353,7 @@ const HomeSettings = () => {
 
       {/* Content Sections */}
       {config.sections.map((section, index) => (
-        <div key={section.id} className="bg-white rounded-lg shadow-lg p-6">
+        <div key={section.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-800">Section: {section.title}</h2>
             <label className="flex items-center cursor-pointer">

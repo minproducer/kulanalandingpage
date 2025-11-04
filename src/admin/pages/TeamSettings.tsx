@@ -267,7 +267,7 @@ const TeamSettings = () => {
       </div>
 
       {/* Hero Section Settings */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-800">Hero Section</h2>
           <label className="flex items-center cursor-pointer">
@@ -334,7 +334,7 @@ const TeamSettings = () => {
       </div>
 
       {/* Team Members Management */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-800">Team Members ({config.members.length})</h2>
           <button

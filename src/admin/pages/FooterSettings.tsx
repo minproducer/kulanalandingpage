@@ -143,7 +143,7 @@ const FooterSettings = () => {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mx-auto mb-4"></div>
-          <p className="font-sans text-text-secondary">Loading configuration...</p>
+          <p className="font-sans text-gray-700 dark:text-gray-300">Loading configuration...</p>
         </div>
       </div>
     );
@@ -205,10 +205,10 @@ const FooterSettings = () => {
       )}
 
       <div className="mb-8">
-        <h1 className="font-serif text-4xl font-bold text-text-primary mb-2">
+        <h1 className="font-serif text-4xl font-bold text-gray-900 dark:text-white mb-2">
           Footer Settings
         </h1>
-        <p className="font-sans text-text-secondary">
+        <p className="font-sans text-gray-700 dark:text-gray-300">
           Manage footer sections visibility and content
         </p>
       </div>
@@ -216,7 +216,7 @@ const FooterSettings = () => {
       {/* Footer Sections */}
       <div className="space-y-6">
         {/* Company Info Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
@@ -225,8 +225,8 @@ const FooterSettings = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-accent font-semibold text-text-primary text-lg">Company Info</p>
-                <p className="font-sans text-sm text-text-secondary">Logo and company description</p>
+                <p className="font-accent font-semibold text-gray-900 dark:text-white text-lg">Company Info</p>
+                <p className="font-sans text-sm text-gray-700 dark:text-gray-300">Logo and company description</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -269,7 +269,7 @@ const FooterSettings = () => {
 
               {/* Description */}
               <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Description</span>
+                <span className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Description</span>
                 <textarea
                   value={config.sections.companyInfo.description || ''}
                   onChange={(e) => handleTextChange('companyInfo', 'description', e.target.value)}
@@ -283,7 +283,7 @@ const FooterSettings = () => {
         </div>
 
         {/* Navigation Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
@@ -292,8 +292,8 @@ const FooterSettings = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-accent font-semibold text-text-primary text-lg">Navigation</p>
-                <p className="font-sans text-sm text-text-secondary">Quick links menu</p>
+                <p className="font-accent font-semibold text-gray-900 dark:text-white text-lg">Navigation</p>
+                <p className="font-sans text-sm text-gray-700 dark:text-gray-300">Quick links menu</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -309,10 +309,10 @@ const FooterSettings = () => {
           
           {config.sections.navigation.enabled && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <p className="font-accent text-sm font-semibold text-text-primary mb-2">
+              <p className="font-accent text-sm font-semibold text-gray-900 dark:text-white mb-2">
                 Note: Navigation links are managed in the code. You can only toggle visibility here.
               </p>
-              <p className="text-xs text-text-secondary">
+              <p className="text-xs text-gray-700 dark:text-gray-300">
                 Current links: Home, Projects, Management Team, FAQ
               </p>
             </div>
@@ -320,7 +320,7 @@ const FooterSettings = () => {
         </div>
 
         {/* Contact Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
@@ -329,8 +329,8 @@ const FooterSettings = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-accent font-semibold text-text-primary text-lg">Contact</p>
-                <p className="font-sans text-sm text-text-secondary">Email, phone, and location</p>
+                <p className="font-accent font-semibold text-gray-900 dark:text-white text-lg">Contact</p>
+                <p className="font-sans text-sm text-gray-700 dark:text-gray-300">Email, phone, and location</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -347,7 +347,7 @@ const FooterSettings = () => {
           {config.sections.contact.enabled && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
               <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Title</span>
+                <span className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Title</span>
                 <input
                   type="text"
                   value={config.sections.contact.title || ''}
@@ -357,7 +357,7 @@ const FooterSettings = () => {
                 />
               </label>
               <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Email</span>
+                <span className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Email</span>
                 <input
                   type="email"
                   value={config.sections.contact.email || ''}
@@ -367,7 +367,7 @@ const FooterSettings = () => {
                 />
               </label>
               <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Phone</span>
+                <span className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Phone</span>
                 <input
                   type="tel"
                   value={config.sections.contact.phone || ''}
@@ -377,7 +377,7 @@ const FooterSettings = () => {
                 />
               </label>
               <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Location</span>
+                <span className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Location</span>
                 <input
                   type="text"
                   value={config.sections.contact.location || ''}
@@ -391,7 +391,7 @@ const FooterSettings = () => {
         </div>
 
         {/* Social Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
@@ -400,8 +400,8 @@ const FooterSettings = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-accent font-semibold text-text-primary text-lg">Social Media</p>
-                <p className="font-sans text-sm text-text-secondary">Social media links</p>
+                <p className="font-accent font-semibold text-gray-900 dark:text-white text-lg">Social Media</p>
+                <p className="font-sans text-sm text-gray-700 dark:text-gray-300">Social media links</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -418,7 +418,7 @@ const FooterSettings = () => {
           {config.sections.social.enabled && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-4">
               <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Title</span>
+                <span className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Title</span>
                 <input
                   type="text"
                   value={config.sections.social.title || ''}
@@ -429,7 +429,7 @@ const FooterSettings = () => {
               </label>
 
               <div className="space-y-4">
-                <p className="font-accent text-sm font-semibold text-text-primary">Social Media Platforms</p>
+                <p className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Social Media Platforms</p>
                 
                 {/* Email */}
                 <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
@@ -446,7 +446,7 @@ const FooterSettings = () => {
                     className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
-                    <label className="block text-sm font-medium text-text-primary mb-1">📧 Email</label>
+                    <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">📧 Email</label>
                     <input
                       type="email"
                       value={config.sections.social.platforms?.email?.value || ''}
@@ -479,7 +479,7 @@ const FooterSettings = () => {
                     className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
-                    <label className="block text-sm font-medium text-text-primary mb-1">💼 LinkedIn</label>
+                    <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">💼 LinkedIn</label>
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-gray-500">linkedin.com/company/</span>
                       <input
@@ -515,7 +515,7 @@ const FooterSettings = () => {
                     className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
-                    <label className="block text-sm font-medium text-text-primary mb-1">📘 Facebook</label>
+                    <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">📘 Facebook</label>
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-gray-500">facebook.com/</span>
                       <input
@@ -551,7 +551,7 @@ const FooterSettings = () => {
                     className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
-                    <label className="block text-sm font-medium text-text-primary mb-1">🐦 Twitter/X</label>
+                    <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">🐦 Twitter/X</label>
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-gray-500">twitter.com/</span>
                       <input
@@ -587,7 +587,7 @@ const FooterSettings = () => {
                     className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
-                    <label className="block text-sm font-medium text-text-primary mb-1">📷 Instagram</label>
+                    <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">📷 Instagram</label>
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-gray-500">instagram.com/</span>
                       <input
@@ -623,7 +623,7 @@ const FooterSettings = () => {
                     className="mt-1 w-4 h-4 text-gold bg-gray-100 border-gray-300 rounded focus:ring-gold focus:ring-2"
                   />
                   <div className="flex-1">
-                    <label className="block text-sm font-medium text-text-primary mb-1">📺 YouTube</label>
+                    <label className="block text-sm font-medium text-gray-900 dark:text-white mb-1">📺 YouTube</label>
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-gray-500">youtube.com/@</span>
                       <input
@@ -649,7 +649,7 @@ const FooterSettings = () => {
         </div>
 
         {/* Copyright Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <div className="bg-gold bg-opacity-10 p-3 rounded-lg mr-4">
@@ -658,8 +658,8 @@ const FooterSettings = () => {
                 </svg>
               </div>
               <div>
-                <p className="font-accent font-semibold text-text-primary text-lg">Copyright</p>
-                <p className="font-sans text-sm text-text-secondary">Copyright notice text</p>
+                <p className="font-accent font-semibold text-gray-900 dark:text-white text-lg">Copyright</p>
+                <p className="font-sans text-sm text-gray-700 dark:text-gray-300">Copyright notice text</p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -676,7 +676,7 @@ const FooterSettings = () => {
           {config.copyright.enabled && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
               <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Year</span>
+                <span className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Year</span>
                 <input
                   type="number"
                   value={config.copyright.year || new Date().getFullYear()}
@@ -688,7 +688,7 @@ const FooterSettings = () => {
                 />
               </label>
               <label className="block">
-                <span className="font-accent text-sm font-semibold text-text-primary">Copyright Text</span>
+                <span className="font-accent text-sm font-semibold text-gray-900 dark:text-white">Copyright Text</span>
                 <input
                   type="text"
                   value={config.copyright.text || ''}

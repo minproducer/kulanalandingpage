@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { apiService } from '../../services/apiService';
 import ImageUploadField from '../components/ImageUploadField';
+import { useApp } from '../contexts/AppContext';
+import { translations } from '../locales/translations';
 
 interface Project {
   id: number;
@@ -20,6 +22,8 @@ interface Project {
 }
 
 const ProjectsManagement = () => {
+  const { language } = useApp();
+  const t = translations[language];
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -284,13 +288,13 @@ const ProjectsManagement = () => {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Projects Management</h1>
-            <p className="text-gray-600">Manage your development projects</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t.projects.title}</h1>
+            <p className="text-gray-600 dark:text-gray-400">{t.common.add} / {t.common.edit} {t.projects.title}</p>
           </div>
           <button
             onClick={handleAddNew}
             disabled={saving}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-blue-600 dark:bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200 font-semibold flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -302,7 +306,7 @@ const ProjectsManagement = () => {
 
       {/* Edit/Add Form */}
       {(editingProject || isAddingNew) && (
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8 border-2 border-blue-500">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8 border-2 border-blue-500">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">
             {isAddingNew ? 'Add New Project' : 'Edit Project'}
           </h2>
@@ -593,7 +597,7 @@ const ProjectsManagement = () => {
       )}
 
       {/* Projects List */}
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
         <div className="p-6 bg-gray-50 border-b">
           <h2 className="text-xl font-bold text-gray-800">All Projects ({projects.length})</h2>
         </div>
@@ -674,7 +678,7 @@ const ProjectsManagement = () => {
                     <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
                   {projects.map((project) => (
                     <tr key={project.id} className="hover:bg-gray-50 transition-colors">
                       <td className="px-6 py-4">

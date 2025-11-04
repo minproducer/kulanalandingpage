@@ -100,21 +100,21 @@ const PageSettings = () => {
       )}
 
       <div className="mb-8">
-        <h1 className="text-3xl font-serif font-bold text-text-primary mb-2">
+        <h1 className="text-3xl font-serif font-bold text-gray-900 dark:text-white mb-2">
           Page Visibility Settings
         </h1>
-        <p className="text-text-secondary">
+        <p className="text-gray-700 dark:text-gray-300">
           Control which pages are visible on your website. Disabled pages will be hidden from navigation and inaccessible.
         </p>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 max-w-2xl">
         <div className="space-y-6">
           {/* Home Page Toggle */}
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div className="flex-1">
-              <h3 className="font-semibold text-lg text-text-primary mb-1">Home Page</h3>
-              <p className="text-sm text-text-secondary">
+              <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">Home Page</h3>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
                 Main landing page with hero section and content
               </p>
             </div>
@@ -135,8 +135,8 @@ const PageSettings = () => {
           {/* Team Page Toggle */}
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div className="flex-1">
-              <h3 className="font-semibold text-lg text-text-primary mb-1">Management Team Page</h3>
-              <p className="text-sm text-text-secondary">
+              <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">Management Team Page</h3>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
                 Team member profiles and information
               </p>
             </div>
@@ -157,8 +157,8 @@ const PageSettings = () => {
           {/* Projects Page Toggle */}
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div className="flex-1">
-              <h3 className="font-semibold text-lg text-text-primary mb-1">Projects Page</h3>
-              <p className="text-sm text-text-secondary">
+              <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">Projects Page</h3>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
                 Portfolio of completed and ongoing projects
               </p>
             </div>
@@ -179,8 +179,8 @@ const PageSettings = () => {
           {/* FAQ Page Toggle */}
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div className="flex-1">
-              <h3 className="font-semibold text-lg text-text-primary mb-1">FAQ Page</h3>
-              <p className="text-sm text-text-secondary">
+              <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">FAQ Page</h3>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
                 Frequently asked questions and answers
               </p>
             </div>

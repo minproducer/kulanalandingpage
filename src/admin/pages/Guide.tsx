@@ -242,7 +242,7 @@ const Guide = () => {
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8">
+      <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8">
         <div className="flex items-center gap-3 mb-2">
           <span className="text-4xl">📚</span>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t.guide.title}</h1>
@@ -251,7 +251,7 @@ const Guide = () => {
       </div>
 
       {/* Table of Contents */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+      <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <span>📋</span>
           {t.guide.toc}
@@ -279,7 +279,7 @@ const Guide = () => {
         <div
           key={section.id}
           id={section.id}
-          className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8 scroll-mt-6"
+          className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8 scroll-mt-6"
         >
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
             <span className="text-3xl">{section.icon}</span>
