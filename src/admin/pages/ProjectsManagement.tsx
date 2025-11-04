@@ -689,8 +689,8 @@ const ProjectsManagement = () => {
                         <div className="text-sm text-gray-500 line-clamp-2">{project.description}</div>
                       </td>
                       <td className="px-6 py-4 text-gray-700">{project.location}</td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${
                           project.status === 'Completed' ? 'bg-green-100 text-green-800' :
                           project.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
                           project.status === 'Coming Soon' ? 'bg-yellow-100 text-yellow-800' :
