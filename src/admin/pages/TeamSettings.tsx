@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { apiService, API_ENDPOINTS } from '../../services/apiService';
+import { apiService } from '../../services/apiService';
 import Notification from '../components/Notification';
+import ImageUploadField from '../components/ImageUploadField';
 
 interface TeamMember {
   id: number;
@@ -38,8 +39,6 @@ const TeamSettings = () => {
   // Team member editing
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [memberFormData, setMemberFormData] = useState<TeamMember>({
     id: 0,
     name: '',
@@ -147,107 +146,10 @@ const TeamSettings = () => {
     setMemberFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    console.log('🖼️ Starting image upload:', file.name, file.type, file.size);
-
-    try {
-      setUploadingImage(true);
-      setUploadProgress(0);
-
-      // Show preview immediately using FileReader
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        console.log('✅ Preview loaded (base64)');
-        setMemberFormData(prev => ({ ...prev, image: reader.result as string }));
-      };
-      reader.readAsDataURL(file);
-
-      const formDataUpload = new FormData();
-      formDataUpload.append('image', file);
-
-      const xhr = new XMLHttpRequest();
-
-      xhr.upload.addEventListener('progress', (e) => {
-        if (e.lengthComputable) {
-          const percentComplete = (e.loaded / e.total) * 100;
-          console.log('📊 Upload progress:', Math.round(percentComplete) + '%');
-          setUploadProgress(Math.round(percentComplete));
-        }
-      });
-
-      const uploadPromise = new Promise<{ success: boolean; data?: { url: string }; message?: string }>((resolve, reject) => {
-        xhr.addEventListener('load', () => {
-          console.log('📥 Server response status:', xhr.status);
-          console.log('📥 Server response:', xhr.responseText);
-          if (xhr.status === 200) {
-            try {
-              const result = JSON.parse(xhr.responseText);
-              resolve(result);
-            } catch (err) {
-              console.error('❌ Failed to parse JSON:', err);
-              reject(new Error('Failed to parse response'));
-            }
-          } else {
-            reject(new Error(`Upload failed with status ${xhr.status}`));
-          }
-        });
-
-        xhr.addEventListener('error', () => {
-          console.error('❌ Network error during upload');
-          reject(new Error('Network error during upload'));
-        });
-
-        xhr.addEventListener('abort', () => {
-          console.error('❌ Upload cancelled');
-          reject(new Error('Upload cancelled'));
-        });
-      });
-
-      const token = localStorage.getItem('adminToken');
-      
-      xhr.open('POST', API_ENDPOINTS.UPLOAD_IMAGE);
-      if (token) {
-        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-      }
-      xhr.send(formDataUpload);
-
-      const result = await uploadPromise;
-      console.log('🎉 Upload result:', result);
-
-      if (result.success && result.data?.url) {
-        console.log('✅ Upload successful! Server URL:', result.data.url);
-        setMemberFormData(prev => ({ ...prev, image: result.data?.url || '' }));
-      } else {
-        console.error('❌ Upload failed:', result.message);
-        setNotification({ type: 'error', message: 'Upload failed: ' + (result.message || 'Unknown error') });
-        setTimeout(() => setNotification(null), 3000);
-        setMemberFormData(prev => ({ ...prev, image: '' }));
-      }
-    } catch (error) {
-      console.error('❌ Upload error:', error);
-      setNotification({ type: 'error', message: 'Failed to upload image. Please try again.' });
-      setTimeout(() => setNotification(null), 3000);
-      setMemberFormData(prev => ({ ...prev, image: '' }));
-    } finally {
-      setUploadingImage(false);
-      console.log('🏁 Upload process finished');
-      setTimeout(() => setUploadProgress(0), 2000);
-    }
-  };
-
   const handleSaveMember = async () => {
     // Validation
     if (!memberFormData.name || !memberFormData.title || !memberFormData.bio || !memberFormData.image) {
       setNotification({ type: 'error', message: 'Please fill in all fields (Name, Title, Bio, Image)' });
-      setTimeout(() => setNotification(null), 3000);
-      return;
-    }
-
-    if (uploadingImage) {
-      setNotification({ type: 'error', message: 'Please wait for image upload to complete' });
       setTimeout(() => setNotification(null), 3000);
       return;
     }
@@ -517,27 +419,13 @@ const TeamSettings = () => {
                     </div>
                   )}
                   <div className="flex-1">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      disabled={uploadingImage}
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                    <ImageUploadField
+                      label="Member Photo"
+                      value={memberFormData.image}
+                      onChange={(url) => setMemberFormData(prev => ({ ...prev, image: url }))}
+                      disabled={saving}
+                      description="Recommended size: 300x300px for square avatars."
                     />
-                    {uploadingImage && (
-                      <div className="mt-3">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-blue-700">Uploading...</span>
-                          <span className="text-sm font-medium text-blue-700">{uploadProgress}%</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                          <div 
-                            className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out"
-                            style={{ width: `${uploadProgress}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
@@ -545,16 +433,16 @@ const TeamSettings = () => {
               <div className="flex gap-4 pt-2">
                 <button
                   onClick={handleSaveMember}
-                  disabled={!memberFormData.name || !memberFormData.title || !memberFormData.bio || !memberFormData.image || uploadingImage || saving}
+                  disabled={!memberFormData.name || !memberFormData.title || !memberFormData.bio || !memberFormData.image || saving}
                   className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  {(uploadingImage || saving) && (
+                  {saving && (
                     <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                   )}
-                  {uploadingImage ? 'Uploading Image...' : saving ? 'Saving...' : 'Save Member'}
+                  {saving ? 'Saving...' : 'Save Member'}
                 </button>
                 <button
                   onClick={handleCancelEdit}

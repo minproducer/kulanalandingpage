@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiService } from '../../services/apiService';
 import Notification from '../components/Notification';
+import ImageUploadField from '../components/ImageUploadField';
 
 interface ContentSection {
   id: string;
@@ -223,18 +224,13 @@ const HomeSettings = () => {
 
         {config.hero.enabled && (
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Background Image URL
-              </label>
-              <input
-                type="url"
-                value={config.hero.backgroundImage}
-                onChange={(e) => handleInputChange('hero', 'backgroundImage', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="https://example.com/hero-image.jpg"
-              />
-            </div>
+            <ImageUploadField
+              label="Hero Background Image"
+              value={config.hero.backgroundImage}
+              onChange={(url) => handleInputChange('hero', 'backgroundImage', url)}
+              disabled={saving}
+              description="Fullscreen hero background. Recommended size: 1920x1080px."
+            />
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -353,18 +349,13 @@ const HomeSettings = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Image URL
-                </label>
-                <input
-                  type="url"
-                  value={section.image}
-                  onChange={(e) => handleSectionChange(index, 'image', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="https://example.com/section-image.jpg"
-                />
-              </div>
+              <ImageUploadField
+                label="Section Image"
+                value={section.image}
+                onChange={(url) => handleSectionChange(index, 'image', url)}
+                disabled={saving}
+                description="Section content image. Recommended size: 800x600px."
+              />
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>

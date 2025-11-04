@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { apiService, API_ENDPOINTS } from '../../services/apiService';
+import { apiService } from '../../services/apiService';
+import ImageUploadField from '../components/ImageUploadField';
 
 interface Project {
   id: number;
@@ -23,10 +24,6 @@ const ProjectsManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadingGallery, setUploadingGallery] = useState(false);
-  const [galleryUploadProgress, setGalleryUploadProgress] = useState(0);
   const [saving, setSaving] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
@@ -76,177 +73,6 @@ const ProjectsManagement = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    console.log('🖼️ Starting image upload:', file.name, file.type, file.size);
-
-    try {
-      setUploadingImage(true);
-      setUploadProgress(0);
-
-      // Show preview immediately using FileReader
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        console.log('✅ Preview loaded (base64)');
-        setFormData(prev => ({ ...prev, image: reader.result as string }));
-      };
-      reader.readAsDataURL(file);
-
-      const formDataUpload = new FormData();
-      formDataUpload.append('image', file);
-
-      // Use XMLHttpRequest for progress tracking
-      const xhr = new XMLHttpRequest();
-
-      // Track upload progress
-      xhr.upload.addEventListener('progress', (e) => {
-        if (e.lengthComputable) {
-          const percentComplete = (e.loaded / e.total) * 100;
-          console.log('📊 Upload progress:', Math.round(percentComplete) + '%');
-          setUploadProgress(Math.round(percentComplete));
-        }
-      });
-
-      // Handle completion
-      const uploadPromise = new Promise<{ success: boolean; data?: { url: string }; message?: string }>((resolve, reject) => {
-        xhr.addEventListener('load', () => {
-          console.log('📥 Server response status:', xhr.status);
-          console.log('📥 Server response:', xhr.responseText);
-          if (xhr.status === 200) {
-            try {
-              const result = JSON.parse(xhr.responseText);
-              resolve(result);
-            } catch (err) {
-              console.error('❌ Failed to parse JSON:', err);
-              reject(new Error('Failed to parse response'));
-            }
-          } else {
-            reject(new Error(`Upload failed with status ${xhr.status}`));
-          }
-        });
-
-        xhr.addEventListener('error', () => {
-          console.error('❌ Network error during upload');
-          reject(new Error('Network error during upload'));
-        });
-
-        xhr.addEventListener('abort', () => {
-          console.error('❌ Upload cancelled');
-          reject(new Error('Upload cancelled'));
-        });
-      });
-
-      // Get auth token
-      const token = localStorage.getItem('adminToken');
-      
-      xhr.open('POST', API_ENDPOINTS.UPLOAD_IMAGE);
-      if (token) {
-        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-      }
-      xhr.send(formDataUpload);
-
-      const result = await uploadPromise;
-      console.log('🎉 Upload result:', result);
-
-      if (result.success && result.data?.url) {
-        console.log('✅ Upload successful! Server URL:', result.data.url);
-        // Replace preview with actual server URL
-        setFormData(prev => ({ ...prev, image: result.data?.url || '' }));
-      } else {
-        console.error('❌ Upload failed:', result.message);
-        setNotification({ type: 'error', message: 'Upload failed: ' + (result.message || 'Unknown error') });
-        setTimeout(() => setNotification(null), 3000);
-        // Keep the preview but mark as failed
-        setFormData(prev => ({ ...prev, image: '' }));
-      }
-    } catch (error) {
-      console.error('❌ Upload error:', error);
-      setNotification({ type: 'error', message: 'Failed to upload image. Please try again.' });
-      setTimeout(() => setNotification(null), 3000);
-      // Revert to empty if upload fails
-      setFormData(prev => ({ ...prev, image: '' }));
-    } finally {
-      setUploadingImage(false);
-      console.log('🏁 Upload process finished');
-      // Keep progress at 100% for a moment before resetting
-      setTimeout(() => setUploadProgress(0), 2000);
-    }
-  };
-
-  // Gallery image upload
-  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      setUploadingGallery(true);
-      setGalleryUploadProgress(0);
-
-      const formDataUpload = new FormData();
-      formDataUpload.append('image', file);
-
-      const xhr = new XMLHttpRequest();
-
-      xhr.upload.addEventListener('progress', (e) => {
-        if (e.lengthComputable) {
-          const percentComplete = (e.loaded / e.total) * 100;
-          setGalleryUploadProgress(Math.round(percentComplete));
-        }
-      });
-
-      const uploadPromise = new Promise<{ success: boolean; data?: { url: string }; message?: string }>((resolve, reject) => {
-        xhr.addEventListener('load', () => {
-          if (xhr.status === 200) {
-            try {
-              const result = JSON.parse(xhr.responseText);
-              resolve(result);
-            } catch {
-              reject(new Error('Failed to parse response'));
-            }
-          } else {
-            reject(new Error(`Upload failed with status ${xhr.status}`));
-          }
-        });
-
-        xhr.addEventListener('error', () => reject(new Error('Network error')));
-        xhr.addEventListener('abort', () => reject(new Error('Upload cancelled')));
-      });
-
-      const token = localStorage.getItem('adminToken');
-      
-      xhr.open('POST', API_ENDPOINTS.UPLOAD_IMAGE);
-      if (token) {
-        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-      }
-      xhr.send(formDataUpload);
-
-      const result = await uploadPromise;
-
-      if (result.success && result.data?.url) {
-        setFormData(prev => ({
-          ...prev,
-          imageGallery: [...(prev.imageGallery || []), result.data?.url || '']
-        }));
-        setNotification({ type: 'success', message: 'Gallery image uploaded!' });
-        setTimeout(() => setNotification(null), 2000);
-      } else {
-        setNotification({ type: 'error', message: 'Upload failed: ' + (result.message || 'Unknown error') });
-        setTimeout(() => setNotification(null), 3000);
-      }
-    } catch (error) {
-      console.error('Gallery upload error:', error);
-      setNotification({ type: 'error', message: 'Failed to upload gallery image' });
-      setTimeout(() => setNotification(null), 3000);
-    } finally {
-      setUploadingGallery(false);
-      setTimeout(() => setGalleryUploadProgress(0), 2000);
-      // Reset file input
-      e.target.value = '';
-    }
-  };
-
   const handleRemoveGalleryImage = (index: number) => {
     setFormData(prev => ({
       ...prev,
@@ -282,13 +108,6 @@ const ProjectsManagement = () => {
     // Validation
     if (!formData.name || !formData.location || !formData.image || !formData.description) {
       setNotification({ type: 'error', message: 'Please fill in all required fields (Name, Location, Image, Description)' });
-      setTimeout(() => setNotification(null), 3000);
-      return;
-    }
-
-    // Check if image is still uploading
-    if (uploadingImage) {
-      setNotification({ type: 'error', message: 'Please wait for image upload to complete' });
       setTimeout(() => setNotification(null), 3000);
       return;
     }
@@ -619,51 +438,13 @@ const ProjectsManagement = () => {
 
             {/* Image Upload */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Project Image *
-              </label>
-              <div className="flex items-start gap-4">
-                {formData.image && (
-                  <div className="relative">
-                    <img
-                      src={formData.image}
-                      alt="Preview"
-                      className="w-32 h-32 object-cover rounded-lg border-2 border-gray-200"
-                    />
-                    <button
-                      onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                )}
-                <div className="flex-1">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    disabled={uploadingImage}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                  />
-                  {uploadingImage && (
-                    <div className="mt-3">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-sm font-medium text-blue-700">Uploading...</span>
-                        <span className="text-sm font-medium text-blue-700">{uploadProgress}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                        <div 
-                          className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out"
-                          style={{ width: `${uploadProgress}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <ImageUploadField
+                label="Project Image *"
+                value={formData.image}
+                onChange={(url) => setFormData(prev => ({ ...prev, image: url }))}
+                disabled={saving}
+                description="Main project image. Recommended size: 800x600px."
+              />
             </div>
 
             {/* Image Gallery Upload */}
@@ -699,30 +480,21 @@ const ProjectsManagement = () => {
                 </div>
               )}
 
-              {/* Upload Button */}
-              <div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleGalleryUpload}
-                  disabled={uploadingGallery}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                />
-                {uploadingGallery && (
-                  <div className="mt-3">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium text-purple-700">Uploading gallery image...</span>
-                      <span className="text-sm font-medium text-purple-700">{galleryUploadProgress}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                      <div 
-                        className="bg-purple-600 h-2.5 rounded-full transition-all duration-300 ease-out"
-                        style={{ width: `${galleryUploadProgress}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              {/* Add Gallery Image */}
+              <ImageUploadField
+                label="Add Gallery Image"
+                value=""
+                onChange={(url) => {
+                  if (url) {
+                    setFormData(prev => ({
+                      ...prev,
+                      imageGallery: [...(prev.imageGallery || []), url]
+                    }));
+                  }
+                }}
+                disabled={saving}
+                description="Each image will be added to the gallery. Clear after adding to add another."
+              />
             </div>
 
             {/* Specifications Editor */}
@@ -794,16 +566,16 @@ const ProjectsManagement = () => {
           <div className="flex gap-4 mt-6">
             <button
               onClick={handleSaveProject}
-              disabled={!formData.name || !formData.location || !formData.image || !formData.description || uploadingImage || saving}
+              disabled={!formData.name || !formData.location || !formData.image || !formData.description || saving}
               className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
             >
-              {(uploadingImage || saving) && (
+              {saving && (
                 <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               )}
-              {uploadingImage ? 'Uploading Image...' : saving ? 'Saving...' : 'Save Project'}
+              {saving ? 'Saving...' : 'Save Project'}
             </button>
             <button
               onClick={handleCancelEdit}
