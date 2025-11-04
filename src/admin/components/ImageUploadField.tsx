@@ -137,31 +137,31 @@ const ImageUploadField = ({
           type="button"
           onClick={() => setMethod('url')}
           disabled={disabled}
-          className={`flex-1 px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+          className={`flex-1 px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all ${
             method === 'url'
               ? 'bg-blue-600 text-white'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           } disabled:opacity-50 disabled:cursor-not-allowed`}
         >
-          <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
           </svg>
-          Image URL
+          <span className="hidden sm:inline">Image </span>URL
         </button>
         <button
           type="button"
           onClick={() => setMethod('upload')}
           disabled={disabled}
-          className={`flex-1 px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+          className={`flex-1 px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all ${
             method === 'upload'
               ? 'bg-green-600 text-white'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           } disabled:opacity-50 disabled:cursor-not-allowed`}
         >
-          <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
           </svg>
-          Upload File
+          Upload<span className="hidden sm:inline"> File</span>
         </button>
       </div>
 
@@ -173,7 +173,7 @@ const ImageUploadField = ({
             value={urlInput}
             onChange={(e) => handleUrlChange(e.target.value)}
             disabled={disabled}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             placeholder="https://example.com/image.jpg"
           />
           <p className="text-xs text-gray-500 mt-1">
@@ -216,11 +216,11 @@ const ImageUploadField = ({
       {value && (
         <div className="mt-4">
           <p className="text-xs font-semibold text-gray-700 mb-2">Preview:</p>
-          <div className="relative inline-block">
+          <div className="relative inline-block w-full sm:w-auto">
             <img
               src={value}
               alt="Preview"
-              className="max-w-full h-32 object-contain rounded-lg border-2 border-gray-200"
+              className="w-full sm:max-w-full h-24 sm:h-32 object-contain rounded-lg border-2 border-gray-200"
               onError={(e) => {
                 e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23ddd" width="200" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle"%3EImage Error%3C/text%3E%3C/svg%3E';
               }}
@@ -232,9 +232,9 @@ const ImageUploadField = ({
                 setUrlInput('');
               }}
               disabled={disabled}
-              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors disabled:opacity-50"
+              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 sm:p-1 hover:bg-red-600 transition-colors disabled:opacity-50"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>

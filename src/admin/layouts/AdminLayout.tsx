@@ -7,13 +7,18 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Default closed on mobile
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleLogout = () => {
     clearAuthToken();
     navigate('/admin/login');
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
   };
 
   const menuItems = [
@@ -30,8 +35,22 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 bg-navy text-white transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-20'} z-50`}>
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      {/* Sidebar - Desktop & Mobile */}
+      <aside className={`
+        fixed inset-y-0 left-0 bg-navy text-white z-50
+        transition-all duration-300 ease-in-out
+        ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+        lg:translate-x-0
+        ${sidebarOpen ? 'w-64' : 'w-20'}
+      `}>
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-4 border-b border-navy-light">
@@ -43,10 +62,19 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               )}
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="hidden lg:block text-gray-400 hover:text-white transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={sidebarOpen ? 'M11 19l-7-7 7-7m8 14l-7-7 7-7' : 'M13 5l7 7-7 7M5 5l7 7-7 7'} />
+                </svg>
+              </button>
+              {/* Mobile Close Button */}
+              <button
+                onClick={closeMobileMenu}
+                className="lg:hidden text-gray-400 hover:text-white transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
@@ -59,6 +87,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 <li key={item.path}>
                   <Link
                     to={item.path}
+                    onClick={closeMobileMenu}
                     className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
                       isActive(item.path)
                         ? 'bg-gold text-white'
@@ -93,34 +122,49 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       </aside>
 
       {/* Main Content */}
-      <div className={`transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
+      <div className={`
+        transition-all duration-300
+        lg:ml-20 ${sidebarOpen ? 'lg:ml-64' : ''}
+      `}>
         {/* Top Bar */}
-        <header className="bg-white shadow-sm">
-          <div className="px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center">
-              <h2 className="font-serif text-2xl font-bold text-text-primary">
+        <header className="bg-white shadow-sm sticky top-0 z-30">
+          <div className="px-4 lg:px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="lg:hidden text-gray-600 hover:text-navy transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              
+              <h2 className="font-serif text-xl lg:text-2xl font-bold text-text-primary">
                 Admin Panel
               </h2>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 lg:space-x-4">
               <a
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center px-4 py-2 text-sm font-accent font-medium text-gold hover:text-gold-light transition-colors"
+                className="flex items-center px-3 lg:px-4 py-2 text-xs lg:text-sm font-accent font-medium text-gold hover:text-gold-light transition-colors"
               >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 lg:w-5 lg:h-5 lg:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
-                View Website
+                <span className="hidden lg:inline">View Website</span>
               </a>
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="p-6">
-          {children}
+        <main className="p-4 lg:p-6">
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
         </main>
       </div>
     </div>

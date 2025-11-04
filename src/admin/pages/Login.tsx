@@ -46,25 +46,25 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-navy flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-8">
-        <div className="text-center mb-8">
+    <div className="min-h-screen bg-navy flex items-center justify-center px-4 py-6">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-6 sm:p-8">
+        <div className="text-center mb-6 sm:mb-8">
           <img 
             src="/KulanaDev Logo - center.png" 
             alt="Kulana Development" 
-            className="h-16 mx-auto mb-4"
+            className="h-12 sm:h-16 mx-auto mb-3 sm:mb-4"
           />
-          <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary mb-2">
             Admin Panel
           </h1>
-          <p className="font-sans text-text-secondary">
+          <p className="font-sans text-sm sm:text-base text-text-secondary">
             Sign in to manage your website
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
+            <div className="bg-red-50 border border-red-200 text-red-600 px-3 sm:px-4 py-2 sm:py-3 rounded text-sm">
               {error}
             </div>
           )}
@@ -78,7 +78,7 @@ const Login = () => {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition text-sm sm:text-base"
               placeholder="Enter your username"
               required
             />
@@ -93,7 +93,7 @@ const Login = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition text-sm sm:text-base"
               placeholder="Enter your password"
               required
             />
@@ -102,16 +102,16 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gold hover:bg-gold-light text-white font-accent font-semibold py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gold hover:bg-gold-light text-white font-accent font-semibold py-2.5 sm:py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
-        <div className="mt-6 text-center">
+        <div className="mt-4 sm:mt-6 text-center">
           <a 
             href="/" 
-            className="font-sans text-sm text-gold hover:text-gold-light transition-colors"
+            className="font-sans text-xs sm:text-sm text-gold hover:text-gold-light transition-colors"
           >
             ← Back to Website
           </a>
