@@ -167,11 +167,6 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
-            <div className="px-4 pt-3">
-              <button className="w-full bg-gold text-white font-accent font-semibold px-6 py-2.5 rounded">
-                Partner
-              </button>
-            </div>
           </div>
         )}
       </div>
