@@ -1,19 +1,6 @@
-import { createContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-
-type Language = 'en' | 'vi';
-type Theme = 'light' | 'dark';
-
-interface AppContextType {
-  language: Language;
-  theme: Theme;
-  toggleLanguage: () => void;
-  toggleTheme: () => void;
-  setLanguage: (lang: Language) => void;
-  setTheme: (theme: Theme) => void;
-}
-
-export const AppContext = createContext<AppContextType | undefined>(undefined);
+import { AppContext, type Language, type Theme } from './AppContextType';
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>(() => {
